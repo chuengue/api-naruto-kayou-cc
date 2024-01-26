@@ -5,4 +5,6 @@ export interface IUser {
   email: string
   phoneNumber: string
   password: string
+  createdAt?: string
+  updatedAt?: string
 }

@@ -71,5 +71,14 @@ export const signIn = async (
     }
     return res.status(StatusCodes.OK).json({
         acessToken: acessTokenResponse,
+        user: {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+        }
     });
 };
