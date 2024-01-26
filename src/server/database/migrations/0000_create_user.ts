@@ -1,0 +1,37 @@
+
+
+import { Knex } from 'knex';
+import { ETableNames } from '../ETableNames';
+
+export const up = async (knex: Knex) => {
+    return knex
+        .schema
+        .createTable(ETableNames.users, (table) => {
+            table.uuid('id').primary().index();
+            table.string('fisrtName').notNullable().checkLength('>', 3);
+            table.string('lasttName').notNullable().checkLength('>', 3);
+            table.string('email').index().unique().notNullable().checkLength('>', 5);
+            table.string('phoneNumber').notNullable().checkLength('>', 8);
+            table.string('password').notNullable().checkLength('>', 6);
+            table.timestamp('createdAt').defaultTo(knex.fn.now());
+            table.timestamp('updatedAt').defaultTo(knex.fn.now());
+
+
+            table.comment('Tabela usada para armazenar usuarios do sistema');
+           
+            
+
+        })
+        .then(()=> {
+            console.log(`# Create table ${ETableNames.users}`);
+        });
+};
+
+export const down = async (knex: Knex) => {
+    return knex
+        .schema
+        .dropTable(ETableNames.users)
+        .then(()=> {
+            console.log(`# Drop table ${ETableNames.users}`);
+        });
+};
