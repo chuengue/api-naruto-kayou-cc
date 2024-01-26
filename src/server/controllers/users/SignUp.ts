@@ -1,9 +1,9 @@
 import { validation } from '../../shared/middleware';
 
-import { UsersProvider } from '@providers/user';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
+import { UsersProvider } from '../../database/providers/user';
 import {
     LoginErrorCodes,
     SQLErrors,

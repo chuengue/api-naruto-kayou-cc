@@ -2,9 +2,8 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
 
-import { IUser } from '@database/models';
-import { UsersProvider } from '@providers/user';
-import { EJWTErrors } from '@shared/services/JWTService/types';
+import { IUser } from '../../database/models';
+import { UsersProvider } from '../../database/providers/user';
 import {
     JWTService,
     LoginErrorCodes,
@@ -14,6 +13,7 @@ import {
     sendErrorResponse,
     validation,
 } from '../../shared';
+import { EJWTErrors } from '../../shared/services/JWTService/types';
 import { ISignInUserBodyProps } from './types';
 
 const TLoginError = getErrorMessage('Errors.loginErrors');
