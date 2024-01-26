@@ -6,6 +6,7 @@ import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
 import { IUser } from '../../database/models';
 import { UsersProvider } from '../../database/providers/user';
+import { PasswordCrypto } from '../../shared/services/PasswordCrypto';
 import { ISignInUserBodyProps } from './types';
 
 export const signInValidation = validation((getSchema) => ({
@@ -32,7 +33,13 @@ export const signIn = async (
             },
         });
     }
-    if (password !== result.password) {
+
+    const passwordMatch = await PasswordCrypto.verifyPassword(
+        password,
+        result.password
+    );
+
+    if (!passwordMatch) {
         res.status(StatusCodes.UNAUTHORIZED).json({
             errors: {
                 default: 'Email ou senha invalida',
@@ -42,5 +49,4 @@ export const signIn = async (
         res.status(StatusCodes.OK).json({
             acessToken: 'teste.teste.teste',
         });
-    //return res.status(StatusCodes.CREATED).json(result);
 };
