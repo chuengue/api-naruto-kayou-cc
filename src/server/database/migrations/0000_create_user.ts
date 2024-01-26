@@ -7,9 +7,9 @@ export const up = async (knex: Knex) => {
     return knex
         .schema
         .createTable(ETableNames.users, (table) => {
-            table.uuid('id').primary().index();
-            table.string('fisrtName').notNullable().checkLength('>', 3);
-            table.string('lasttName').notNullable().checkLength('>', 3);
+            table.uuid('id').defaultTo(knex.fn.uuid()).primary();
+            table.string('firstName').notNullable().checkLength('>', 3);
+            table.string('lastName').notNullable().checkLength('>', 3);
             table.string('email').index().unique().notNullable().checkLength('>', 5);
             table.string('phoneNumber').notNullable().checkLength('>', 8);
             table.string('password').notNullable().checkLength('>', 6);
