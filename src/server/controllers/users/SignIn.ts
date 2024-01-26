@@ -1,13 +1,23 @@
 import { Request, Response } from 'express';
-
-import { validation } from '../../shared/middleware';
-
 import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
-import { IUser } from '../../database/models';
-import { UsersProvider } from '../../database/providers/user';
-import { PasswordCrypto } from '../../shared/services/PasswordCrypto';
+
+import { IUser } from '@database/models';
+import { UsersProvider } from '@providers/user';
+import { EJWTErrors } from '@shared/services/JWTService/types';
+import {
+    JWTService,
+    LoginErrorCodes,
+    PasswordCrypto,
+    SQLErrors,
+    getErrorMessage,
+    sendErrorResponse,
+    validation,
+} from '../../shared';
 import { ISignInUserBodyProps } from './types';
+
+const TLoginError = getErrorMessage('Errors.loginErrors');
+const TGenericError = getErrorMessage('Errors.genericErrors');
 
 export const signInValidation = validation((getSchema) => ({
     body: getSchema<ISignInUserBodyProps>(
@@ -23,30 +33,43 @@ export const signIn = async (
     res: Response
 ) => {
     const { email, password } = req.body;
+    const user = (await UsersProvider.getByEmail(email)) as IUser;
 
-    const result = (await UsersProvider.getByEmail(email)) as IUser;
+    const acessTokenResponse = JWTService.sign({ uid: user.id });
 
-    if (result instanceof Error) {
-        res.status(StatusCodes.UNAUTHORIZED).json({
-            errors: {
-                default: 'Email ou senha invalida',
-            },
-        });
+    if (user instanceof Error && user.message === SQLErrors.GENERIC_DB_ERROR) {
+        return sendErrorResponse(
+            res,
+            StatusCodes.BAD_GATEWAY,
+            TGenericError(LoginErrorCodes.DATABASE_CONNECTION_ERROR)
+        );
     }
-
+    if (
+        user instanceof Error &&
+        user.message === SQLErrors.NOT_FOUND_REGISTER
+    ) {
+        return sendErrorResponse(
+            res,
+            StatusCodes.UNAUTHORIZED,
+            TLoginError(LoginErrorCodes.INVALID_EMAIL_OR_PASSWORD)
+        );
+    }
     const passwordMatch = await PasswordCrypto.verifyPassword(
         password,
-        result.password
+        user.password
     );
-
     if (!passwordMatch) {
-        res.status(StatusCodes.UNAUTHORIZED).json({
-            errors: {
-                default: 'Email ou senha invalida',
-            },
-        });
-    } else
-        res.status(StatusCodes.OK).json({
-            acessToken: 'teste.teste.teste',
-        });
+        return sendErrorResponse(
+            res,
+            StatusCodes.UNAUTHORIZED,
+            TLoginError(LoginErrorCodes.INVALID_EMAIL_OR_PASSWORD)
+        );
+    }
+
+    if (acessTokenResponse === EJWTErrors.SECRET_NOT_FOUND) {
+        sendErrorResponse(res, StatusCodes.UNAUTHORIZED, acessTokenResponse);
+    }
+    return res.status(StatusCodes.OK).json({
+        acessToken: acessTokenResponse,
+    });
 };

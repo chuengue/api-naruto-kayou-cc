@@ -1,3 +1,4 @@
+import { SQLErrors } from '../../../shared/enum/ErrorCodesSQL';
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 import { IUser } from '../../models';
@@ -11,12 +12,11 @@ export const getByEmail = async (email: string): Promise<IUser | Error> => {
 
         if (result) {
             const userResult: IUser = result as IUser;
+
             return userResult;
         }
-
-        return new Error('Registro não encontrado');
+        return new Error(SQLErrors.NOT_FOUND_REGISTER);
     } catch (error) {
-        console.error(error);
-        return new Error('Erro ao consultar o registro');
+        return new Error(SQLErrors.GENERIC_DB_ERROR);
     }
 };

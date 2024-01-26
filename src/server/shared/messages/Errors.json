@@ -1,0 +1,20 @@
+{
+  "genericErrors": [
+    {"code": 1005, "message": "Recurso não encontrado."},
+    {"code": 1006, "message": "Erro interno do servidor. Tente novamente mais tarde."},
+    {"code": 1007, "message": "Erro ao conectar ao banco de dados"},
+    {"code": 1008, "message": "Registro não encontrado"}
+    
+  ],
+  "loginErrors": [
+    {"code": 1001, "message": "Endereço de e-mail ou senha inválido."},
+    {"code": 1002, "message": "Usuário não encontrado."},
+    {"code": 1003, "message": "Falha na autenticação. Verifique suas credenciais."},
+    {"code": 1004, "message": "Permissão negada. Você não tem permissão para realizar esta ação."}
+  ],
+  "registerErrors": [
+    {"code": 1009, "message": "Email já cadastrado"}
+    
+  ]
+  
+}

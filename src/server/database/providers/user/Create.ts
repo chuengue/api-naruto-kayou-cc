@@ -1,4 +1,4 @@
-import { SQLErrors } from '../../../shared/helpers/ErrorCodesSQL';
+import { SQLErrors } from '../../../shared/enum/ErrorCodesSQL';
 import { PasswordCrypto } from '../../../shared/services/PasswordCrypto';
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
@@ -7,6 +7,7 @@ import { IUser } from '../../models';
 interface customError extends Error {
   code: string;
 }
+
 export const create = async (
     user: Omit<IUser, 'id'>
 ): Promise<number | Error> => {
@@ -22,12 +23,12 @@ export const create = async (
             return result;
         }
 
-        return new Error('Erro ao cadastrar o registro');
+        return new Error(SQLErrors.GENERIC_DB_ERROR);
     } catch (error) {
         const err = error as customError;
         if (err.code === SQLErrors.DUPLICATE_REGISTER) {
-            return new Error('Email já cadastrado');
+            return new Error(SQLErrors.DUPLICATE_REGISTER);
         }
-        return new Error('Erro ao cadastrar o registro');
+        return new Error(SQLErrors.GENERIC_DB_ERROR);
     }
 };
