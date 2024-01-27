@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { LoginErrorCodes } from '../enum/ErrorsCodes';
+import { AppErrors } from '../enum/ErrorsCodes';
 import { ErrorMessage, PathHandleResult } from './types';
 
 
@@ -25,7 +25,7 @@ const loadErrorMessages = (filePath: string): ErrorMessage | null => {
     }
 };
 
-export const getErrorMessage = (filePath: string): ((errorCode: LoginErrorCodes) => object | null ) => {
+export const getErrorMessage = (filePath: string): ((errorCode: AppErrors) => object | null ) => {
     const combinedPath = path.join(directory, pathHandle(filePath).archiveName + '.json');
 
     const errorMessages: ErrorMessage | null = loadErrorMessages(combinedPath);

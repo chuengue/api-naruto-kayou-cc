@@ -11,3 +11,10 @@ export interface PathHandleResult {
   archiveName: string;
   errorList: string;
 }
+export  interface ListResult {
+    totalItems: number
+    itemsPerPage: number
+    page: number
+    results: unknown[],
+
+}

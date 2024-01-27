@@ -5,10 +5,11 @@ import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
 import { UsersProvider } from '../../database/providers/user';
 import {
-    LoginErrorCodes,
+    GenericErrors,
+    RegisterErrors,
     SQLErrors,
     getErrorMessage,
-    sendErrorResponse,
+    sendErrorResponse
 } from '../../shared';
 import { ISignUpUserBodyProps } from './types';
 
@@ -40,7 +41,7 @@ export const signUp = async (
         return sendErrorResponse(
             res,
             StatusCodes.BAD_GATEWAY,
-            TGenericError(LoginErrorCodes.DATABASE_CONNECTION_ERROR)
+            TGenericError(GenericErrors.DatabaseConnectionError)
         );
     }
     if (
@@ -50,7 +51,7 @@ export const signUp = async (
         return sendErrorResponse(
             res,
             StatusCodes.BAD_GATEWAY,
-            TRegisterError(LoginErrorCodes.EMAIL_ALREADY_USE)
+            TRegisterError(RegisterErrors.EmailAlreadyRegistered)
         );
     }
 

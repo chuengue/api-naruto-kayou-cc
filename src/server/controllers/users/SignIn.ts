@@ -5,13 +5,14 @@ import * as yup from 'yup';
 import { IUser } from '../../database/models';
 import { UsersProvider } from '../../database/providers/user';
 import {
+    GenericErrors,
     JWTService,
-    LoginErrorCodes,
+    LoginErrors,
     PasswordCrypto,
     SQLErrors,
     getErrorMessage,
     sendErrorResponse,
-    validation,
+    validation
 } from '../../shared';
 import { EJWTErrors } from '../../shared/services/JWTService/types';
 import { ISignInUserBodyProps } from './types';
@@ -41,7 +42,7 @@ export const signIn = async (
         return sendErrorResponse(
             res,
             StatusCodes.BAD_GATEWAY,
-            TGenericError(LoginErrorCodes.DATABASE_CONNECTION_ERROR)
+            TGenericError(GenericErrors.DatabaseConnectionError)
         );
     }
     if (
@@ -51,7 +52,7 @@ export const signIn = async (
         return sendErrorResponse(
             res,
             StatusCodes.UNAUTHORIZED,
-            TLoginError(LoginErrorCodes.INVALID_EMAIL_OR_PASSWORD)
+            TLoginError(LoginErrors.InvalidEmailOrPassword)
         );
     }
     const passwordMatch = await PasswordCrypto.verifyPassword(
@@ -62,7 +63,7 @@ export const signIn = async (
         return sendErrorResponse(
             res,
             StatusCodes.UNAUTHORIZED,
-            TLoginError(LoginErrorCodes.INVALID_EMAIL_OR_PASSWORD)
+            TLoginError(LoginErrors.InvalidEmailOrPassword)
         );
     }
 
