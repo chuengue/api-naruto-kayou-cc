@@ -9,8 +9,8 @@ export const up = async (knex: Knex) => {
         .createTable(ETableNames.wishList, (table) => {
             table.uuid('cardId').notNullable();
             table.uuid('userId').notNullable();
-            table.foreign('cardId').references('id').inTable(ETableNames.narutoCards);
-            table.foreign('userId').references('id').inTable(ETableNames.users);
+            table.foreign('cardId').references('id').inTable(ETableNames.narutoCards).onDelete('RESTRICT').onUpdate('CASCADE');
+            table.foreign('userId').references('id').inTable(ETableNames.users).onDelete('CASCADE').onUpdate('CASCADE');
             table.timestamp('createdAt').defaultTo(knex.fn.now());
             table.timestamp('updatedAt').defaultTo(knex.fn.now());
 

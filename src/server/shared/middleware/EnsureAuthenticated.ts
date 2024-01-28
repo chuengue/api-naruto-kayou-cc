@@ -39,6 +39,7 @@ export const ensureAuthenticated: RequestHandler = async (req, res, next) => {
             StatusCodes.UNAUTHORIZED,
             TLoginError(LoginErrors.UserNotAuthenticated)
         );
-    }
+    } 
+    req.headers.userId = jwtData.uid.toString(); 
     return next();
 };
