@@ -12,7 +12,7 @@ import {
     SQLErrors,
     getErrorMessage,
     sendErrorResponse,
-    validation
+    validation,
 } from '../../shared';
 import { EJWTErrors } from '../../shared/services/JWTService/types';
 import { ISignInUserBodyProps } from './types';
@@ -71,15 +71,17 @@ export const signIn = async (
         sendErrorResponse(res, StatusCodes.UNAUTHORIZED, acessTokenResponse);
     }
     return res.status(StatusCodes.OK).json({
-        acessToken: acessTokenResponse,
-        user: {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            phoneNumber: user.phoneNumber,
-            createdAt: user.createdAt,
-            updatedAt: user.updatedAt,
-        }
+        results: {
+            acessToken: acessTokenResponse,
+            user: {
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                phoneNumber: user.phoneNumber,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt,
+            },
+        },
     });
 };

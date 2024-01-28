@@ -9,7 +9,9 @@
       {"code": 1012, "message": "Erro de validação. Verifique os campos informados."},
       {"code": 1013, "message": "Limite de requisições excedido. Tente novamente mais tarde."},
       {"code": 1014, "message": "Token de acesso inválido. Realize o login novamente."},
-      {"code": 1015, "message": "Falha na comunicação com serviços externos."}
+      {"code": 1015, "message": "Falha na comunicação com serviços externos."},
+      {"code": 2002, "message": "Erro ao consultar a quantidade total de registros"}
+      
     ],
     "loginErrors": [
       {"code": 1001, "message": "Endereço de e-mail ou senha inválido."},
@@ -34,10 +36,18 @@
     ],
     "cardsErrors": [
         {"code": 2001, "message": "Nenhum item encontrado"},
-        {"code": 2002, "message": "Erro ao consultar a quantidade total de registros"},
         {"code": 2003, "message": "Erro ao enviar e-mail de verificação."},
         {"code": 2004, "message": "Falha na validação do e-mail. Verifique sua caixa de entrada."},
         {"code": 2005, "message": "Erro ao gerar código de verificação."},
-        {"code": 2006, "message": "Erro ao verificar a autenticidade do usuário."}
-      ]
+        {"code": 2006, "message": "Erro ao verificar a autenticidade do usuário."},
+        {"code": 2007, "message": "O parâmetro CardId precisa ser informado."}
+
+        
+      ],
+      "wishListErrors": [
+        {"code": 3001, "message": "Item já existe na lista de desejos."},
+        {"code": 3002, "message": "Erro ao adicionar item à lista de desejos."},
+        {"code": 3003, "message": "Erro ao obter itens da lita de desejos."}
+        
+    ]
   }

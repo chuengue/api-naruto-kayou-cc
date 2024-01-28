@@ -18,3 +18,10 @@ export  interface ListResult {
     results: unknown[],
 
 }
+export interface SuccessListResponse {
+    totalItems?: number;
+    itemsPerPage?: number;
+    totalPages?: number;
+    page?: number;
+    results: unknown;
+}

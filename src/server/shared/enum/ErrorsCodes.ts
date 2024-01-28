@@ -9,6 +9,7 @@ export enum GenericErrors {
     RateLimitExceeded = 1013,
     InvalidAccessToken = 1014,
     ExternalServiceFailure = 1015,
+    CountError = 2002,
 }
 
 export enum LoginErrors {
@@ -33,13 +34,19 @@ export enum RegisterErrors {
     UserAuthenticationVerificationError = 1024,
 }
 
-export enum CardsErros {
+export enum CardsErrors {
     EmptyListCard = 2001,
-    CountError = 2002
+    NotFountCardId = 2007
+}
+export enum WishListErrors {
+    AlreadyExistsWishlist = 3001,
+    ErrorAddingItemWishlist = 3002,
+    ErrorGetWishlist = 3006
 
 }
 export type AppErrors =
     | GenericErrors
     | LoginErrors
     | RegisterErrors
-    | CardsErros;
+    | CardsErrors
+    | WishListErrors

@@ -1,21 +1,25 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import { WishListProviders } from './../../database/providers/wishList/index';
 
 import { validation } from '../../shared/middleware';
 
 import * as yup from 'yup';
-import { CardsProviders } from '../../database/providers/allCards';
-import { IFilterListCardProps } from '../../database/providers/types';
+import { IGetWishListProps } from '../../database/providers/types';
 import {
     GenericErrors,
+    WishListErrors,
     getErrorMessage,
     sendErrorResponse,
     sendSuccessResponseList,
 } from '../../shared';
-import { IGetAllCardsQueryProps } from './types';
+import { IGetAllCardsQueryProps } from '../allCards/types';
 
 const TGenericError = getErrorMessage('Errors.genericErrors');
 const TCardError = getErrorMessage('Errors.cardsErrors');
+const TWishlistError= getErrorMessage('Errors.wishListError');
+
+
 
 export const getAllValidation = validation((getSchema) => ({
     query: getSchema<IGetAllCardsQueryProps>(
@@ -34,24 +38,27 @@ export const getAll = async (
     req: Request<{}, {}, {}, IGetAllCardsQueryProps>,
     res: Response
 ) => {
-    const filters : IFilterListCardProps = {
+    const wishListGetProps: IGetWishListProps = {
         code: req.query.code || '',
         box: req.query.box || '',
         rarity: req.query.rarity || '',
         name: req.query.name || '',
-        page: req.query.page  || 1,
-        limit: req.query.limit  || 10,
+        page: req.query.page || 1,
+        limit: req.query.limit || 10,
+        userId: req.headers.userId as string,
     };
 
-    const result = await CardsProviders.getAll(filters);
+    const result = await WishListProviders.getAllWishlistItemsForUser(
+        wishListGetProps
+    );
 
-    const count = await CardsProviders.count(filters);
+    const count = await WishListProviders.countWishListItems(wishListGetProps);
 
     if (result instanceof Error) {
         return sendErrorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,
-            TGenericError(1006)
+            TWishlistError(WishListErrors.ErrorGetWishlist)
         );
     } else if (count instanceof Error) {
         return sendErrorResponse(

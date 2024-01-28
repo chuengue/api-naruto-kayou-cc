@@ -11,7 +11,6 @@ export const getById = async (cardId: string): Promise<iCard | Error> => {
             .first();
 
         if (result) return result;
-
         return new Error(SQLErrors.NOT_FOUND_REGISTER);
     } catch (error) {
         return new Error(SQLErrors.GENERIC_DB_ERROR);

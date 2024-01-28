@@ -2,18 +2,18 @@ import { SQLErrors } from '../../../shared';
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 import { iCard } from '../../models/card';
+import { IFilterListCardProps } from '../types';
 
-export const getAll = async (
-    page: number,
-    limit: number,
-    code: string,
-    box: string,
-    name: string,
-    rarity: string,
-): Promise<iCard[] | Error> => {
+export const getAll = async ({
+    name,
+    code,
+    box,
+    rarity,
+    page,
+    limit,
+}: IFilterListCardProps): Promise<iCard[] | Error> => {
     try {
-        const query = Knex(ETableNames.narutoCards)
-            .select('*');
+        const query = Knex(ETableNames.narutoCards).select('*');
 
         if (name) {
             query.where('name', 'like', `%${name}%`);
@@ -31,9 +31,7 @@ export const getAll = async (
             query.where('box', 'like', `%${box}%`);
         }
 
-        const result = await query
-            .offset((page - 1) * limit)
-            .limit(limit);
+        const result = await query.offset((page - 1) * limit).limit(limit);
 
         return result;
     } catch (error) {

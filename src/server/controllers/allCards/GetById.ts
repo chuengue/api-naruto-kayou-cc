@@ -3,11 +3,13 @@ import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
 
 import { CardsProviders } from '../../database/providers/allCards';
-import { SQLErrors, getErrorMessage, sendErrorResponse, sendSucessResponseList } from '../../shared';
-import { validation } from '../../shared/middleware';
+import { CardsErrors, GenericErrors, SQLErrors, getErrorMessage, sendErrorResponse, sendSuccessResponseList } from '../../shared';
+import { validation } from '../../shared';
 import { IGetByIdCardsParamProps } from './types';
 
 const TGenericError = getErrorMessage('Errors.genericErrors');
+const TCardError = getErrorMessage('Errors.cardsErrors');
+
 
 export const getByIdValidation = validation((getSchema) => ({
     params: getSchema<IGetByIdCardsParamProps>(
@@ -21,12 +23,13 @@ export const getById = async (
     req: Request<IGetByIdCardsParamProps>,
     res: Response
 ) => {
+    console.log(req.params.cardId);
     if (!req.params.cardId) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            errors: {
-                default: 'O parâmetro "id" precisa ser informado.',
-            },
-        });
+        return sendErrorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            TCardError(CardsErrors.NotFountCardId)
+        );
     }
 
     const result = await CardsProviders.getById(req.params.cardId);
@@ -35,16 +38,15 @@ export const getById = async (
         return sendErrorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,
-            TGenericError(1008)
+            TGenericError(GenericErrors.RecordNotFound)
         );
     }
     if (result instanceof Error && SQLErrors.GENERIC_DB_ERROR) {
         return sendErrorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,
-            TGenericError(1006)
+            TGenericError(GenericErrors.InternalServerError)
         );
     }
-
-    sendSucessResponseList(res,StatusCodes.OK,result);
+    sendSuccessResponseList(res,StatusCodes.OK,result);
 };
