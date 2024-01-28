@@ -3,8 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
 
 import { CardsProviders } from '../../database/providers/allCards';
-import { CardsErrors, GenericErrors, SQLErrors, getErrorMessage, sendErrorResponse, sendSuccessResponseList } from '../../shared';
-import { validation } from '../../shared';
+import { CardsErrors, GenericErrors, SQLErrors, getErrorMessage, sendErrorResponse, sendSuccessResponseList, validation } from '../../shared';
 import { IGetByIdCardsParamProps } from './types';
 
 const TGenericError = getErrorMessage('Errors.genericErrors');
@@ -23,7 +22,6 @@ export const getById = async (
     req: Request<IGetByIdCardsParamProps>,
     res: Response
 ) => {
-    console.log(req.params.cardId);
     if (!req.params.cardId) {
         return sendErrorResponse(
             res,
