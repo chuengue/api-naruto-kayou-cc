@@ -1,10 +1,12 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 
+
 export const count = async (filters: { [key: string]: string }): Promise<number | Error> => {
+
     try {
         const query = Knex(ETableNames.narutoCards)
-            .where('id', '>', 0); // Filtro padrão
+            .select('*');
 
         if (filters.rarity) {
             query.andWhere('rarity', '=', filters.rarity);

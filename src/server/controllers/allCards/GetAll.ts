@@ -59,7 +59,7 @@ export const getAll = async (
     res.setHeader('access-control-expose-headers', 'x-total-count');
     res.setHeader('x-total-count', count);
 
-    sendSucessResponseList(res,StatusCodes.OK,result,count,req.query.limit || 10, req.query.page || 1);
+    sendSucessResponseList(res,StatusCodes.OK,result,count,req.query.page || 1, req.query.limit || 10);
 
     
 };

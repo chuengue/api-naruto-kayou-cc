@@ -1,6 +1,16 @@
 import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
+const resolveItemsPerPage = (
+    itemsPerPage: number | undefined,
+    totalItems: number | undefined
+): number | undefined => {
+    if (totalItems && totalItems < 10) {
+        return totalItems;
+    }
+    return itemsPerPage;
+};
+
 export const sendSucessResponseList = (
     res: Response,
     statusCode: StatusCodes,
@@ -11,7 +21,7 @@ export const sendSucessResponseList = (
 ) => {
     return res.status(statusCode).json({
         totalItems: totalItems,
-        itemsPerPage: itemsPerPage,
+        itemsPerPage: resolveItemsPerPage(itemsPerPage, totalItems),
         page: page,
         results: results,
     });
