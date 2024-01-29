@@ -1,5 +1,7 @@
 export enum ETableNames {
     users = 'users',
-    wishList = 'wishList',
-    narutoCards = 'narutoCards'
+    wishList = 'wishlist',
+    narutoCards = 'naruto_cards',
+    collections = 'collections',
+    collectionsItems = ' collections_items'
 }

@@ -16,7 +16,7 @@ export const up = async (knex: Knex) => {
             table.timestamp('createdAt').defaultTo(knex.fn.now());
             table.timestamp('updatedAt').defaultTo(knex.fn.now());
 
-            table.comment('Tabela usada para armazenar items de desejo dos usuarios do sistema');
+            table.comment('Tabela usada para armazenar items de desejo dos usuários do sistema');
         })
         .then(() => {
             console.log(`# Create table ${ETableNames.wishList}`);
