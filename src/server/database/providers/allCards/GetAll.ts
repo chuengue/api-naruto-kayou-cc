@@ -10,7 +10,7 @@ export const getAll = async ({
     box,
     rarity,
     page,
-    limit,
+    limit
 }: IFilterListCardProps): Promise<iCard[] | Error> => {
     try {
         const query = Knex(ETableNames.narutoCards).select('*');

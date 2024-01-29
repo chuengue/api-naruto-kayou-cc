@@ -7,5 +7,5 @@ export interface IGetAllCardsQueryProps {
     box?: string;
 }
 export interface IGetByIdCardsParamProps {
-    cardId?:string
+    cardId?: string;
 }

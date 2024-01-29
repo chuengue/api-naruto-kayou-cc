@@ -9,7 +9,7 @@ export enum GenericErrors {
     RateLimitExceeded = 1013,
     InvalidAccessToken = 1014,
     ExternalServiceFailure = 1015,
-    CountError = 2002,
+    CountError = 2002
 }
 
 export enum LoginErrors {
@@ -22,7 +22,7 @@ export enum LoginErrors {
     TokenRenewalError = 1017,
     PasswordExpired = 1018,
     AuthenticationRequestExpired = 1019,
-    VerifyErrorToken = 1025,
+    VerifyErrorToken = 1025
 }
 
 export enum RegisterErrors {
@@ -31,7 +31,7 @@ export enum RegisterErrors {
     EmailVerificationSendingError = 1021,
     EmailValidationFailure = 1022,
     VerificationCodeGenerationError = 1023,
-    UserAuthenticationVerificationError = 1024,
+    UserAuthenticationVerificationError = 1024
 }
 
 export enum CardsErrors {
@@ -41,12 +41,8 @@ export enum CardsErrors {
 export enum WishListErrors {
     AlreadyExistsWishlist = 3001,
     ErrorAddingItemWishlist = 3002,
-    ErrorGetWishlist = 3003
-
+    ErrorGetWishlist = 3003,
+    ErrorRemovingItemWishlist = 3004,
+    ItemNotExistingWishList = 3005
 }
-export type AppErrors =
-    | GenericErrors
-    | LoginErrors
-    | RegisterErrors
-    | CardsErrors
-    | WishListErrors
+export type AppErrors = GenericErrors | LoginErrors | RegisterErrors | CardsErrors | WishListErrors;

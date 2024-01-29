@@ -11,17 +11,15 @@ import {
     WishListErrors,
     getErrorMessage,
     sendErrorResponse,
-    sendSuccessResponseList,
+    sendSuccessResponseList
 } from '../../shared';
 import { IGetAllCardsQueryProps } from '../allCards/types';
 
 const TGenericError = getErrorMessage('Errors.genericErrors');
 const TCardError = getErrorMessage('Errors.cardsErrors');
-const TWishlistError= getErrorMessage('Errors.wishListErrors');
+const TWishlistError = getErrorMessage('Errors.wishListErrors');
 
-
-
-export const getAllValidation = validation((getSchema) => ({
+export const getAllValidation = validation(getSchema => ({
     query: getSchema<IGetAllCardsQueryProps>(
         yup.object().shape({
             page: yup.number().optional().moreThan(0),
@@ -29,15 +27,12 @@ export const getAllValidation = validation((getSchema) => ({
             name: yup.string().optional().min(1),
             code: yup.string().optional().min(1),
             box: yup.string().optional().min(1),
-            rarity: yup.string().optional().min(1),
+            rarity: yup.string().optional().min(1)
         })
-    ),
+    )
 }));
 
-export const getAll = async (
-    req: Request<{}, {}, {}, IGetAllCardsQueryProps>,
-    res: Response
-) => {
+export const getAll = async (req: Request<{}, {}, {}, IGetAllCardsQueryProps>, res: Response) => {
     const wishListGetProps: IGetWishListProps = {
         code: req.query.code || '',
         box: req.query.box || '',
@@ -45,12 +40,10 @@ export const getAll = async (
         name: req.query.name || '',
         page: req.query.page || 1,
         limit: req.query.limit || 10,
-        userId: req.headers.userId as string,
+        userId: req.headers.userId as string
     };
 
-    const result = await WishListProviders.getAllWishlistItemsForUser(
-        wishListGetProps
-    );
+    const result = await WishListProviders.getAllWishlistItemsForUser(wishListGetProps);
 
     const count = await WishListProviders.countWishListItems(wishListGetProps);
 
@@ -61,28 +54,13 @@ export const getAll = async (
             TWishlistError(WishListErrors.ErrorGetWishlist)
         );
     } else if (count instanceof Error) {
-        return sendErrorResponse(
-            res,
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            TGenericError(GenericErrors.CountError)
-        );
+        return sendErrorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, TGenericError(GenericErrors.CountError));
     }
     if (result.length === 0) {
-        return sendErrorResponse(
-            res,
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            TCardError(2001)
-        );
+        return sendErrorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, TCardError(2001));
     }
     res.setHeader('access-control-expose-headers', 'x-total-count');
     res.setHeader('x-total-count', count);
 
-    sendSuccessResponseList(
-        res,
-        StatusCodes.OK,
-        result,
-        count,
-        req.query.page || 1,
-        req.query.limit || 10
-    );
+    sendSuccessResponseList(res, StatusCodes.OK, result, count, req.query.page || 1, req.query.limit || 10);
 };

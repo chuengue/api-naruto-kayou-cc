@@ -1,5 +1,4 @@
 export interface IreqHeader extends Headers {
-    userId?: string
-    roles?: string[]
-
+    userId?: string;
+    roles?: string[];
 }

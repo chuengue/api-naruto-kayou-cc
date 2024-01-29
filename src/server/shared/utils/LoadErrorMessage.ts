@@ -3,7 +3,6 @@ import * as path from 'path';
 import { AppErrors } from '../enum/ErrorsCodes';
 import { ErrorMessage, PathHandleResult } from './types';
 
-
 const directory = path.join(__dirname, '..', 'messages/');
 
 const pathHandle = (filePath: string): PathHandleResult => {
@@ -25,7 +24,7 @@ const loadErrorMessages = (filePath: string): ErrorMessage | null => {
     }
 };
 
-export const getErrorMessage = (filePath: string): ((errorCode: AppErrors) => object | null ) => {
+export const getErrorMessage = (filePath: string): ((errorCode: AppErrors) => object | null) => {
     const combinedPath = path.join(directory, pathHandle(filePath).archiveName + '.json');
 
     const errorMessages: ErrorMessage | null = loadErrorMessages(combinedPath);
@@ -34,10 +33,10 @@ export const getErrorMessage = (filePath: string): ((errorCode: AppErrors) => ob
 
     return (errorCode: number): object | null => {
         if (errorMessages && errorMessages[errorList]) {
-            const errorMessageObject = errorMessages[errorList].find((error) => error.code === errorCode);
+            const errorMessageObject = errorMessages[errorList].find(error => error.code === errorCode);
 
             if (errorMessageObject) {
-                return errorMessageObject ;
+                return errorMessageObject;
             } else {
                 console.error(`Code "${errorCode}" not found in error messages.`);
                 return null;

@@ -27,5 +27,5 @@ const verify = (token: string): IJwtData | EJWTErrors => {
 
 export const JWTService = {
     sign,
-    verify,
+    verify
 };

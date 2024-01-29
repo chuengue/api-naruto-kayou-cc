@@ -12,14 +12,14 @@ const baseConfig: Knex.Config = {
         user: process.env[`DATABASE_${env}_USERNAME`],
         password: process.env[`DATABASE_${env}_PASSWORD`],
         port: parseInt(process.env[`DATABASE_${env}_PORT`] || '3306', 10),
-        database: process.env[`DATABASE_${env}_NAME`],
+        database: process.env[`DATABASE_${env}_NAME`]
     },
     migrations: {
-        directory: path.resolve(__dirname, '..', 'migrations'),
+        directory: path.resolve(__dirname, '..', 'migrations')
     },
     seeds: {
-        directory: path.resolve(__dirname, '..', 'seeds'),
-    },
+        directory: path.resolve(__dirname, '..', 'seeds')
+    }
 };
 
 export default baseConfig;

@@ -2,11 +2,7 @@ import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { SuccessListResponse } from './types';
 
-
-const resolveItemsPerPage = (
-    itemsPerPage: number | undefined,
-    totalItems: number | undefined
-): number | undefined => {
+const resolveItemsPerPage = (itemsPerPage: number | undefined, totalItems: number | undefined): number | undefined => {
     if (totalItems !== undefined && totalItems < 10) {
         return totalItems;
     }
@@ -22,7 +18,7 @@ export const sendSuccessResponseList = (
     itemsPerPage?: number
 ): void => {
     let response: SuccessListResponse = {
-        results: results,
+        results: results
     };
 
     if (totalItems !== undefined && itemsPerPage !== undefined && page !== undefined) {
@@ -31,7 +27,7 @@ export const sendSuccessResponseList = (
             totalItems: totalItems,
             itemsPerPage: resolveItemsPerPage(itemsPerPage, totalItems),
             totalPages: Math.ceil(totalItems / itemsPerPage),
-            page: page,
+            page: page
         };
     }
 

@@ -5,10 +5,7 @@ import { IUser } from '../../models';
 
 export const getByEmail = async (email: string): Promise<IUser | Error> => {
     try {
-        const result = await Knex(ETableNames.users)
-            .select('*')
-            .where('email', '=', email)
-            .first();
+        const result = await Knex(ETableNames.users).select('*').where('email', '=', email).first();
 
         if (result) {
             const userResult: IUser = result as IUser;

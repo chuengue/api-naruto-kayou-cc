@@ -16,5 +16,5 @@ const verifyPassword = async (password: string, hashedPassword: string) => {
 
 export const PasswordCrypto = {
     hashPassword,
-    verifyPassword,
+    verifyPassword
 };

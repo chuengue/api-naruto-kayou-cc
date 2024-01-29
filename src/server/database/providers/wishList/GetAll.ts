@@ -10,48 +10,27 @@ export const getAllWishlistItemsForUser = async ({
     rarity,
     box,
     page,
-    limit,
+    limit
 }: IGetWishListProps): Promise<iCard[] | Error> => {
     try {
         let query = Knex(ETableNames.wishList)
             .select(`${ETableNames.narutoCards}.*`)
-            .join(
-                ETableNames.narutoCards,
-                `${ETableNames.wishList}.cardId`,
-                '=',
-                `${ETableNames.narutoCards}.id`
-            )
+            .join(ETableNames.narutoCards, `${ETableNames.wishList}.cardId`, '=', `${ETableNames.narutoCards}.id`)
             .where(`${ETableNames.wishList}.userId`, userId);
         if (name) {
-            query = query.where(
-                `${ETableNames.narutoCards}.name`,
-                'like',
-                `%${name}%`
-            );
+            query = query.where(`${ETableNames.narutoCards}.name`, 'like', `%${name}%`);
         }
 
         if (code) {
-            query = query.where(
-                `${ETableNames.narutoCards}.code`,
-                'like',
-                `%${code}%`
-            );
+            query = query.where(`${ETableNames.narutoCards}.code`, 'like', `%${code}%`);
         }
 
         if (rarity) {
-            query = query.where(
-                `${ETableNames.narutoCards}.rarity`,
-                '=',
-                rarity
-            );
+            query = query.where(`${ETableNames.narutoCards}.rarity`, '=', rarity);
         }
 
         if (box) {
-            query = query.where(
-                `${ETableNames.narutoCards}.box`,
-                'like',
-                `%${box}%`
-            );
+            query = query.where(`${ETableNames.narutoCards}.box`, 'like', `%${box}%`);
         }
 
         const result = await query.offset((page - 1) * limit).limit(limit);

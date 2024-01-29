@@ -1,3 +1,5 @@
-import { IWishList } from '../../database/models/WishList';
+import { IAddItemProps, IremoveItemProps } from '../../database/providers/types';
 
-export interface IAddItemWishlistParamsProps extends Omit<IWishList, 'updatedAt' | 'createdAt' | 'userId'> {}
+export interface IAddItemWishlistParams extends Omit<IAddItemProps, 'userId'> {}
+
+export interface IRemoveItemWishlistParams extends Omit<IremoveItemProps, 'userId'> {}

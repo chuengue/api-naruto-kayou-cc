@@ -9,4 +9,3 @@ export const WishListProviders = {
     ...removeWishlistItem,
     ...countWishListItems
 };
-

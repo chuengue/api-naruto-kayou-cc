@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
 interface Messages {
-  [key: string]: string;
+    [key: string]: string;
 }
 
 const directory = __dirname + '../../../messages/';
@@ -18,8 +18,11 @@ const loadMessages = (filePath: string): Messages | null => {
     }
 };
 
-
-export const  getMessage = (filePath: string, key: string, substitutions: { [key: string]: string } = {}): string | null =>  {
+export const getMessage = (
+    filePath: string,
+    key: string,
+    substitutions: { [key: string]: string } = {}
+): string | null => {
     const filePathComplete = directory + filePath + '.json';
 
     const messages: Messages | null = loadMessages(filePathComplete);

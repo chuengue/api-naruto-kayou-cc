@@ -3,15 +3,12 @@ import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 import { IAddItemProps } from '../types';
 
-export const addWishlistItem = async ({
-    userId,
-    cardId,
-}: IAddItemProps): Promise<void | Error> => {
+export const addWishlistItem = async ({ userId, cardId }: IAddItemProps): Promise<void | Error> => {
     try {
         const existingItem = await Knex(ETableNames.wishList)
             .where({
                 userId: userId,
-                cardId: cardId,
+                cardId: cardId
             })
             .first();
 
@@ -23,7 +20,7 @@ export const addWishlistItem = async ({
             userId: userId,
             cardId: cardId,
             createdAt: Knex.fn.now(),
-            updatedAt: Knex.fn.now(),
+            updatedAt: Knex.fn.now()
         });
 
         return;

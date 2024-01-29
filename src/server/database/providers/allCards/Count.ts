@@ -2,12 +2,7 @@ import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 import { IFilterListCardProps } from '../types';
 
-export const count = async ({
-    rarity,
-    box,
-    code,
-    name,
-}: IFilterListCardProps): Promise<number | Error> => {
+export const count = async ({ rarity, box, code, name }: IFilterListCardProps): Promise<number | Error> => {
     try {
         const query = Knex(ETableNames.narutoCards).select('*');
 
@@ -27,9 +22,7 @@ export const count = async ({
             query.andWhere('name', 'like', `%${name}%`);
         }
 
-        const [{ count }] = await query.count<[{ count: number }]>(
-            '* as count'
-        );
+        const [{ count }] = await query.count<[{ count: number }]>('* as count');
 
         if (Number.isInteger(Number(count))) {
             return Number(count);

@@ -1,22 +1,20 @@
-export interface ContentError{
-  code: number;
-  message: string;
+export interface ContentError {
+    code: number;
+    message: string;
 }
 export interface ErrorMessage {
-  [key: string]: ContentError[]
+    [key: string]: ContentError[];
 }
-
 
 export interface PathHandleResult {
-  archiveName: string;
-  errorList: string;
+    archiveName: string;
+    errorList: string;
 }
-export  interface ListResult {
-    totalItems: number
-    itemsPerPage: number
-    page: number
-    results: unknown[],
-
+export interface ListResult {
+    totalItems: number;
+    itemsPerPage: number;
+    page: number;
+    results: unknown[];
 }
 export interface SuccessListResponse {
     totalItems?: number;

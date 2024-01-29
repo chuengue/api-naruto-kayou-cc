@@ -5,12 +5,10 @@ import { Knex } from '../../knex';
 import { IUser } from '../../models';
 
 interface customError extends Error {
-  code: string;
+    code: string;
 }
 
-export const create = async (
-    user: Omit<IUser, 'id'>
-): Promise<number | Error> => {
+export const create = async (user: Omit<IUser, 'id'>): Promise<number | Error> => {
     try {
         const hashedPassword = await PasswordCrypto.hashPassword(user.password);
 

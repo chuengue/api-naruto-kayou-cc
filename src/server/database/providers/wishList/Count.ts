@@ -2,11 +2,18 @@ import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 import { IGetWishListProps } from '../types';
 
-export const countWishListItems = async ({userId, box, code, rarity,name}: IGetWishListProps): Promise<number | Error> => {
+export const countWishListItems = async ({
+    userId,
+    box,
+    code,
+    rarity,
+    name
+}: IGetWishListProps): Promise<number | Error> => {
     try {
         const query = Knex(ETableNames.wishList)
             .join(ETableNames.narutoCards, `${ETableNames.wishList}.cardId`, '=', `${ETableNames.narutoCards}.id`)
-            .select(ETableNames.narutoCards + '.*').where(`${ETableNames.wishList}.userId`, userId);
+            .select(ETableNames.narutoCards + '.*')
+            .where(`${ETableNames.wishList}.userId`, userId);
 
         if (rarity) {
             query.andWhere(`${ETableNames.narutoCards}.rarity`, '=', rarity);

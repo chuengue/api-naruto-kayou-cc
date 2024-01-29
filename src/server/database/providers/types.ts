@@ -10,6 +10,7 @@ export interface IGetWishListProps extends IFilterListCardProps {
     userId: string;
 }
 export interface IAddItemProps {
-    userId:string
-    cardId:string
+    userId: string;
+    cardId: string;
 }
+export interface IremoveItemProps extends IAddItemProps {}

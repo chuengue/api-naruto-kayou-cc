@@ -1,12 +1,9 @@
-
-
 import { Knex } from 'knex';
 import { ETableNames } from '../ETableNames';
 
 export const up = async (knex: Knex) => {
-    return knex
-        .schema
-        .createTable(ETableNames.users, (table) => {
+    return knex.schema
+        .createTable(ETableNames.users, table => {
             table.uuid('id').defaultTo(knex.fn.uuid()).primary();
             table.string('firstName').notNullable().checkLength('>', 3);
             table.string('lastName').notNullable().checkLength('>', 3);
@@ -16,22 +13,15 @@ export const up = async (knex: Knex) => {
             table.timestamp('createdAt').defaultTo(knex.fn.now());
             table.timestamp('updatedAt').defaultTo(knex.fn.now());
 
-
             table.comment('Tabela usada para armazenar usuarios do sistema');
-           
-            
-
         })
-        .then(()=> {
+        .then(() => {
             console.log(`# Create table ${ETableNames.users}`);
         });
 };
 
 export const down = async (knex: Knex) => {
-    return knex
-        .schema
-        .dropTable(ETableNames.users)
-        .then(()=> {
-            console.log(`# Drop table ${ETableNames.users}`);
-        });
+    return knex.schema.dropTable(ETableNames.users).then(() => {
+        console.log(`# Drop table ${ETableNames.users}`);
+    });
 };
