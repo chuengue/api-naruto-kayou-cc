@@ -41,7 +41,7 @@ export enum CardsErrors {
 export enum WishListErrors {
     AlreadyExistsWishlist = 3001,
     ErrorAddingItemWishlist = 3002,
-    ErrorGetWishlist = 3006
+    ErrorGetWishlist = 3003
 
 }
 export type AppErrors =

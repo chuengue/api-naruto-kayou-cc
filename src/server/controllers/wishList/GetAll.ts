@@ -17,7 +17,7 @@ import { IGetAllCardsQueryProps } from '../allCards/types';
 
 const TGenericError = getErrorMessage('Errors.genericErrors');
 const TCardError = getErrorMessage('Errors.cardsErrors');
-const TWishlistError= getErrorMessage('Errors.wishListError');
+const TWishlistError= getErrorMessage('Errors.wishListErrors');
 
 
 
