@@ -47,11 +47,12 @@
         { "code": 3004, "message": "Erro ao remover item da lista de desejos." },
         { "code": 3005, "message": "Item não existente na lista de desejos." }
     ],
-    "CollectionErrors": [
+    "collectionErrors": [
         { "code": 4001, "message": "Erro ao criar coleção." },
         { "code": 4002, "message": "Erro ao atualizar coleção." },
         { "code": 4003, "message": "Erro ao excluir coleção." },
         { "code": 4004, "message": "Erro ao carregar coleções." },
-        { "code": 4005, "message": "Item não existente na lista de desejos." }
+        { "code": 4005, "message": "Nenhuma coleção cadastrada" },
+        { "code": 4006, "message": "Coleção não pertence ao usuário." }
     ]
 }

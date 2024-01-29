@@ -14,3 +14,13 @@ export interface IAddItemProps {
     cardId: string;
 }
 export interface IremoveItemProps extends IAddItemProps {}
+
+export interface IGetCollectionsProps {
+    userId?: string;
+    page?: number;
+    limit?: number;
+}
+export interface IDeleteCollectionProps {
+    userId?: string;
+    collectionId: string;
+}

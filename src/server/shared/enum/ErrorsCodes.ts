@@ -49,6 +49,8 @@ export enum CollectionErrors {
     errorOnCreate = 4001,
     errorOnUpdate = 4002,
     errorOnDelete = 4003,
-    errorOnGet = 4004
+    errorOnGet = 4004,
+    EmptyListCollection = 4005,
+    CollectionUnauthorized = 4006
 }
 export type AppErrors = GenericErrors | LoginErrors | RegisterErrors | CardsErrors | WishListErrors | CollectionErrors;
