@@ -45,4 +45,10 @@ export enum WishListErrors {
     ErrorRemovingItemWishlist = 3004,
     ItemNotExistingWishList = 3005
 }
-export type AppErrors = GenericErrors | LoginErrors | RegisterErrors | CardsErrors | WishListErrors;
+export enum CollectionErrors {
+    errorOnCreate = 4001,
+    errorOnUpdate = 4002,
+    errorOnDelete = 4003,
+    errorOnGet = 4004
+}
+export type AppErrors = GenericErrors | LoginErrors | RegisterErrors | CardsErrors | WishListErrors | CollectionErrors;
