@@ -48,5 +48,10 @@ router.delete(
     CollectionController.deleteCollectionValidation,
     CollectionController.deleteCollection
 );
-
+router.put(
+    '/api/collections/:collectionId',
+    ensureAuthenticated,
+    CollectionController.updateCollectionValidation,
+    CollectionController.updateCollection
+);
 export { router };

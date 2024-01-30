@@ -1,7 +1,7 @@
 export interface ICollection {
     id: string;
     userId: string;
-    name: string;
+    name?: string;
     description?: string;
     isPublic?: boolean;
     createdAt?: string;
