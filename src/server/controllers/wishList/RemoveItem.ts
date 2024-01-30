@@ -39,5 +39,5 @@ export const removeWishlistItem = async (req: Request<IRemoveItemWishlistParams>
         return sendErrorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, result.message);
     }
 
-    return res.status(StatusCodes.NO_CONTENT).json(result);
+    return res.status(StatusCodes.NO_CONTENT).send();
 };

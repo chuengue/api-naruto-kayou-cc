@@ -33,5 +33,5 @@ export const deleteCollection = async (req: Request<Partial<IDeleteCollectionPro
         );
     }
 
-    return res.status(StatusCodes.NO_CONTENT).json(result);
+    return res.status(StatusCodes.NO_CONTENT).send();
 };

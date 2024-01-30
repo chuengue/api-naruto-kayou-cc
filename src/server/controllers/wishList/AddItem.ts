@@ -35,5 +35,5 @@ export const addWishlistItem = async (req: Request<IAddItemWishlistParams>, res:
         return sendErrorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, result.message);
     }
 
-    return res.status(StatusCodes.NO_CONTENT).json(result);
+    return res.status(StatusCodes.NO_CONTENT).send();
 };

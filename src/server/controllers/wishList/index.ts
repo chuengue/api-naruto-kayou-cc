@@ -6,5 +6,4 @@ export const WishListControllers = {
     ...addWishlistItem,
     ...getAll,
     ...removeWishlistItem
-    //
 };

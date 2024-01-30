@@ -36,5 +36,5 @@ export const signUp = async (req: Request<{}, {}, ISignUpUserBodyProps>, res: Re
         return sendErrorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, newUser.message);
     }
 
-    return res.status(StatusCodes.CREATED).json(newUser);
+    return res.status(StatusCodes.CREATED).send();
 };
