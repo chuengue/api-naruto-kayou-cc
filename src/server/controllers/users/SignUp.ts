@@ -13,6 +13,7 @@ const TGenericError = getErrorMessage('Errors.genericErrors');
 export const signUpValidation = validation(getSchema => ({
     body: getSchema<ISignUpUserBodyProps>(
         yup.object().shape({
+            username: yup.string().required().min(2),
             firstName: yup.string().required().min(3),
             lastName: yup.string().required().min(3),
             email: yup.string().required().email().min(5),

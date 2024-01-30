@@ -10,12 +10,12 @@ export const getCollections = async ({
 }: IGetCollectionsProps): Promise<ICollection[] | Error> => {
     try {
         const collections = await Knex(ETableNames.collections)
-            .select('*')
-            .where('userId', userId)
+            .select('collections.*', 'users.username as author')
+            .join(ETableNames.users, 'collections.userId', '=', 'users.id')
+            .where('collections.userId', userId)
             .offset((page - 1) * limit)
             .limit(limit);
 
-        // Converter isPublic de 0 ou 1 para true ou false
         const modifiedCollections = collections.map(collection => ({
             ...collection,
             isPublic: collection.isPublic === 1 ? true : false
