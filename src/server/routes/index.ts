@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { UsersController } from '../controllers';
 import { cardsController } from '../controllers/allCards';
 import { CollectionController } from '../controllers/collection';
+import { PublicCollectionsControllers } from '../controllers/publicCollections';
 import { WishListControllers } from '../controllers/wishList';
 import { ensureAuthenticated } from '../shared';
 
@@ -29,7 +30,14 @@ router.delete(
     WishListControllers.addWishlistItem
 );
 
-//COLLECTION
+// PUBLIC COLLECTIONS
+router.get(
+    '/api/public-collections',
+    PublicCollectionsControllers.getAllPublicCollectionValidation,
+    PublicCollectionsControllers.getAllPublicCollection
+);
+
+//COLLECTIONS
 router.post(
     '/api/collections',
     ensureAuthenticated,
