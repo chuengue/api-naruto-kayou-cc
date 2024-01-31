@@ -92,4 +92,10 @@ router.post(
     ItemCollectionControllers.addItemToCollectionValidation,
     ItemCollectionControllers.addItemToCollection
 );
+router.delete(
+    '/api/collections/:collectionId/:cardId',
+    ensureAuthenticated,
+    ItemCollectionControllers.removeItemCollectionValidation,
+    ItemCollectionControllers.removeItemCollection
+);
 export { router };

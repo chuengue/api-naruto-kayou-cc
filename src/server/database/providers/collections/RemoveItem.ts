@@ -18,7 +18,7 @@ export const removeItemCollection = async ({
         if (!existingItem) {
             return new Error(SQLErrors.NOT_FOUND_REGISTER);
         }
-        await Knex(ETableNames.wishList)
+        await Knex(ETableNames.collectionsItems)
             .where({
                 collectionId: collectionId,
                 cardId: cardId
@@ -27,6 +27,6 @@ export const removeItemCollection = async ({
         return 'item excluído com sucesso';
     } catch (error) {
         console.error(error);
-        return new Error('Erro ao remover item da coleção indicada ');
+        return new Error(SQLErrors.GENERIC_DB_ERROR);
     }
 };
