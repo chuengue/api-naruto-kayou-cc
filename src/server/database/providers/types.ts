@@ -30,3 +30,13 @@ export interface IPublicCollectionsProps {
     page?: number;
     limit?: number;
 }
+
+export interface IAddItemCollection {
+    userId: string;
+    cardId: string;
+    collectionId: string;
+    quantity?: number;
+}
+
+export interface IRemoveItemCollection
+    extends Omit<IAddItemCollection, 'quantity' | 'userId'> {}

@@ -7,7 +7,7 @@
     "arrowParens": "avoid",
     "endOfLine": "lf",
     "ignorePath": ".gitignore",
-    "printWidth": 120,
+    "printWidth": 80,
     "overrides": [
         {
             "files": "*.md",

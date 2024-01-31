@@ -22,4 +22,5 @@ export interface SuccessListResponse {
     totalPages?: number;
     page?: number;
     results: unknown;
+    success: boolean;
 }
