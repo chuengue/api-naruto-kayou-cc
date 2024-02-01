@@ -104,4 +104,10 @@ router.get(
     ItemCollectionControllers.getAllCollectionItemsValidation,
     ItemCollectionControllers.getAllCollectionItems
 );
+router.patch(
+    '/api/collections/:collectionId/:cardId',
+    ensureAuthenticated,
+    ItemCollectionControllers.modifyItemQuantityValidation,
+    ItemCollectionControllers.modifyItemQuantity
+);
 export { router };

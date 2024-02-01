@@ -10,3 +10,12 @@ export interface IAddItemCollectionBody {
 export interface IGetAllCollectionItemsParams {
     collectionId?: string;
 }
+
+export interface IModifyQuantityItemCollectionBody {
+    newQuantity?: number;
+}
+
+export interface IModifyQuantityItemCollectionParams {
+    collectionId?: string;
+    cardId?: string;
+}

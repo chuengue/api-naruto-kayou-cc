@@ -14,17 +14,20 @@ export const getAllCollectionItem = async ({
 }: IGetAllCollectionItem): Promise<iCard[] | Error> => {
     try {
         let query = Knex(ETableNames.collectionsItems)
-            .select(`${ETableNames.narutoCards}.*`)
+            .select(
+                `${ETableNames.narutoCards}.*`,
+                `${ETableNames.collectionsItems}.quantity`,
+                `${ETableNames.collectionsItems}.createdAt`,
+                `${ETableNames.collectionsItems}.updatedAt`
+            )
             .join(
                 ETableNames.narutoCards,
                 `${ETableNames.collectionsItems}.cardId`,
                 '=',
                 `${ETableNames.narutoCards}.id`
             )
-            .where(
-                `${ETableNames.collectionsItems}.collectionId`,
-                collectionId
-            );
+            .where(`${ETableNames.collectionsItems}.collectionId`, collectionId)
+            .orderBy('createdAt', 'desc');
         if (name) {
             query = query.where(
                 `${ETableNames.narutoCards}.name`,

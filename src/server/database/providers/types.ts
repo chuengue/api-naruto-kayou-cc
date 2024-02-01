@@ -44,3 +44,9 @@ export interface IRemoveItemCollection
 export interface IGetAllCollectionItem extends IFilterListCardProps {
     collectionId: string;
 }
+
+export interface IModifyQuantityItemProps {
+    collectionId: string;
+    cardId: string;
+    newQuantity: number;
+}
