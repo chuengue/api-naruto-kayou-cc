@@ -12,7 +12,7 @@ import {
     SQLErrors
 } from '../../../shared';
 import { validation } from '../../../shared/middleware';
-import { IAddItemCollectionBody, IAddItemCollectionProps } from './type';
+import { IAddItemCollectionBody, IAddItemCollectionProps } from './types';
 
 const TCollectionErrors = getErrorMessage('Errors.collectionErrors');
 

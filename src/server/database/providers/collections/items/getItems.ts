@@ -1,32 +1,30 @@
-import { ETableNames } from '../../ETableNames';
-import { Knex } from '../../knex';
-import { iCard } from '../../models/card';
-import { IGetWishListProps } from '../types';
+import { ETableNames } from '../../../ETableNames';
+import { Knex } from '../../../knex';
+import { iCard } from '../../../models';
+import { IGetAllCollectionItem } from '../../types';
 
-export const getAllWishlistItemsForUser = async ({
-    userId,
+export const getAllCollectionItem = async ({
+    collectionId,
     name,
     code,
     rarity,
     box,
     page,
     limit
-}: IGetWishListProps): Promise<iCard[] | Error> => {
+}: IGetAllCollectionItem): Promise<iCard[] | Error> => {
     try {
-        let query = Knex(ETableNames.wishList)
-            .select(
-                `${ETableNames.narutoCards}.*`,
-                `${ETableNames.wishList}.createdAt`,
-                `${ETableNames.wishList}.updatedAt`
-            )
+        let query = Knex(ETableNames.collectionsItems)
+            .select(`${ETableNames.narutoCards}.*`)
             .join(
                 ETableNames.narutoCards,
-                `${ETableNames.wishList}.cardId`,
+                `${ETableNames.collectionsItems}.cardId`,
                 '=',
                 `${ETableNames.narutoCards}.id`
             )
-            .where(`${ETableNames.wishList}.userId`, userId)
-            .orderBy('createdAt', 'desc');
+            .where(
+                `${ETableNames.collectionsItems}.collectionId`,
+                collectionId
+            );
         if (name) {
             query = query.where(
                 `${ETableNames.narutoCards}.name`,
@@ -64,6 +62,6 @@ export const getAllWishlistItemsForUser = async ({
         return result;
     } catch (error) {
         console.error(error);
-        return new Error('Erro ao obter itens da wishlist para o usuário');
+        return new Error('Erro ao obter itens dessa coleção');
     }
 };

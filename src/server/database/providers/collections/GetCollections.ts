@@ -10,9 +10,18 @@ export const getCollections = async ({
 }: IGetCollectionsProps): Promise<ICollection[] | Error> => {
     try {
         const collections = await Knex(ETableNames.collections)
-            .select('collections.*', 'users.username as author')
-            .join(ETableNames.users, 'collections.userId', '=', 'users.id')
-            .where('collections.userId', userId)
+            .select(
+                `${ETableNames.collections}.*`,
+                `${ETableNames.users}.username as author`
+            )
+            .join(
+                ETableNames.users,
+                `${ETableNames.collections}.userId`,
+                '=',
+                `${ETableNames.users}.id`
+            )
+            .where(`${ETableNames.collections}.userId`, userId)
+            .orderBy('CreatedAt', 'desc')
             .offset((page - 1) * limit)
             .limit(limit);
 

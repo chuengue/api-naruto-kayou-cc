@@ -1,26 +1,24 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { WishListProviders } from './../../database/providers/wishList/index';
-
-import { validation } from '../../shared/middleware';
-
 import * as yup from 'yup';
-import { ETableNames } from '../../database/ETableNames';
-import { CountersProviders } from '../../database/providers/counters';
+import { ETableNames } from '../../../database/ETableNames';
+import { CollectionProvider } from '../../../database/providers/collections';
 import {
     GenericErrors,
     WishListErrors,
     getErrorMessage,
     sendErrorResponse,
-    sendSuccessResponseList
-} from '../../shared';
-import { IGetAllCardsQueryProps } from '../allCards/types';
-
+    sendSuccessResponseList,
+    validation
+} from '../../../shared';
+import { IGetAllCardsQueryProps } from '../../allCards/types';
+import { CountersProviders } from './../../../database/providers/counters/index';
+import { IGetAllCollectionItemsParams } from './types';
 const TGenericError = getErrorMessage('Errors.genericErrors');
 const TCardError = getErrorMessage('Errors.cardsErrors');
 const TWishlistError = getErrorMessage('Errors.wishListErrors');
 
-export const getAllValidation = validation(getSchema => ({
+export const getAllCollectionItemsValidation = validation(getSchema => ({
     query: getSchema<IGetAllCardsQueryProps>(
         yup.object().shape({
             page: yup.number().optional().moreThan(0),
@@ -30,32 +28,37 @@ export const getAllValidation = validation(getSchema => ({
             box: yup.string().optional().min(1),
             rarity: yup.string().optional().min(1)
         })
+    ),
+    params: getSchema<IGetAllCollectionItemsParams>(
+        yup.object().shape({
+            collectionId: yup.string().required().length(36)
+        })
     )
 }));
 
-export const getAll = async (
-    req: Request<{}, {}, {}, IGetAllCardsQueryProps>,
+export const getAllCollectionItems = async (
+    req: Request<IGetAllCollectionItemsParams, {}, {}, IGetAllCardsQueryProps>,
     res: Response
 ) => {
-    const wishListGetProps = {
+    const getAllCollectionProps = {
+        collectionId: req.params.collectionId as string,
         code: req.query.code || '',
         box: req.query.box || '',
         rarity: req.query.rarity || '',
         name: req.query.name || '',
         page: req.query.page || 1,
-        limit: req.query.limit || 10,
-        userId: req.headers.userId as string
+        limit: req.query.limit || 10
     };
 
-    const result =
-        await WishListProviders.getAllWishlistItemsForUser(wishListGetProps);
-
-    const count = await CountersProviders.countCardsWithJoinAndFilters(
-        ETableNames.wishList,
-        { userId: wishListGetProps.userId as string },
-        wishListGetProps
+    const result = await CollectionProvider.getAllCollectionItem(
+        getAllCollectionProps
     );
 
+    const count = await CountersProviders.countCardsWithJoinAndFilters(
+        ETableNames.collectionsItems,
+        { collectionId: req.params.collectionId as string },
+        getAllCollectionProps
+    );
     if (result instanceof Error) {
         return sendErrorResponse(
             res,

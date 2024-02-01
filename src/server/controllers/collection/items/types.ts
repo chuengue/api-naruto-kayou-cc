@@ -6,3 +6,7 @@ export interface IAddItemCollectionProps
 export interface IAddItemCollectionBody {
     cardQuantity?: number;
 }
+
+export interface IGetAllCollectionItemsParams {
+    collectionId?: string;
+}

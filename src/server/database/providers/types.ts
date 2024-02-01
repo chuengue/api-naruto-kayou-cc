@@ -40,3 +40,7 @@ export interface IAddItemCollection {
 
 export interface IRemoveItemCollection
     extends Omit<IAddItemCollection, 'quantity' | 'userId'> {}
+
+export interface IGetAllCollectionItem extends IFilterListCardProps {
+    collectionId: string;
+}

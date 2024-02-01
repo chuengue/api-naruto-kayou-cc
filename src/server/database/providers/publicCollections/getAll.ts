@@ -12,9 +12,13 @@ export const getPublicCollections = async ({
 }: IPublicCollectionsProps): Promise<ICollection[] | Error> => {
     try {
         const query = Knex(ETableNames.collections)
-            .select('collections.*', 'users.username as author')
+            .select(
+                `${ETableNames.collections}.*`,
+                `${ETableNames.users}.username as author`
+            )
             .where('isPublic', true)
-            .join(ETableNames.users, 'collections.userId', '=', 'users.id');
+            .join(ETableNames.users, 'collections.userId', '=', 'users.id')
+            .orderBy('CreatedAt', 'desc');
 
         if (name) {
             query.where('name', 'like', `%${name}%`);

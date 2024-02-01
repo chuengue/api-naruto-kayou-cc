@@ -5,6 +5,7 @@ import * as getCollections from './GetCollections';
 import * as updateCollection from './Update';
 import * as addItemCollection from './items/AddItem';
 import * as removeItemCollection from './items/RemoveItem';
+import * as getAllCollectionItem from './items/getItems';
 export const CollectionProvider = {
     ...create,
     ...getCollections,
@@ -13,5 +14,6 @@ export const CollectionProvider = {
     ...updateCollection,
     ...addItemCollection,
     ...addItemCollection,
-    ...removeItemCollection
+    ...removeItemCollection,
+    ...getAllCollectionItem
 };

@@ -98,4 +98,10 @@ router.delete(
     ItemCollectionControllers.removeItemCollectionValidation,
     ItemCollectionControllers.removeItemCollection
 );
+router.get(
+    '/api/collections/:collectionId',
+    ensureAuthenticated,
+    ItemCollectionControllers.getAllCollectionItemsValidation,
+    ItemCollectionControllers.getAllCollectionItems
+);
 export { router };
