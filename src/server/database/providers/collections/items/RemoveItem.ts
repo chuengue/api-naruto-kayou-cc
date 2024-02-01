@@ -1,7 +1,7 @@
-import { SQLErrors } from '../../../shared';
-import { ETableNames } from '../../ETableNames';
-import { Knex } from '../../knex';
-import { IRemoveItemCollection } from '../types';
+import { SQLErrors } from '../../../../shared';
+import { ETableNames } from '../../../ETableNames';
+import { Knex } from '../../../knex';
+import { IRemoveItemCollection } from '../../types';
 
 export const removeItemCollection = async ({
     collectionId,

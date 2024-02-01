@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
 
-import { CollectionProvider } from '../../database/providers/collections';
+import { CollectionProvider } from '../../../database/providers/collections';
 import {
     CollectionErrors,
     getErrorMessage,
@@ -10,8 +10,8 @@ import {
     sendErrorResponse,
     sendSuccessResponseList,
     SQLErrors
-} from '../../shared';
-import { validation } from '../../shared/middleware';
+} from '../../../shared';
+import { validation } from '../../../shared/middleware';
 import { IAddItemCollectionBody, IAddItemCollectionProps } from './type';
 
 const TCollectionErrors = getErrorMessage('Errors.collectionErrors');

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { UsersController } from '../controllers';
 import { cardsController } from '../controllers/allCards';
 import { CollectionController } from '../controllers/collection';
-import { ItemCollectionControllers } from '../controllers/itemCollection';
+import { ItemCollectionControllers } from '../controllers/collection/items';
 import { PublicCollectionsControllers } from '../controllers/publicCollections';
 import { WishListControllers } from '../controllers/wishList';
 import { ensureAuthenticated } from '../shared';

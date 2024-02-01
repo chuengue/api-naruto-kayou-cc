@@ -1,7 +1,7 @@
-import { ProvidersErrors, SQLErrors } from '../../../shared';
-import { ETableNames } from '../../ETableNames';
-import { Knex } from '../../knex';
-import { IAddItemCollection } from '../types';
+import { ProvidersErrors, SQLErrors } from '../../../../shared';
+import { ETableNames } from '../../../ETableNames';
+import { Knex } from '../../../knex';
+import { IAddItemCollection } from '../../types';
 
 export const addItemCollection = async ({
     userId,
