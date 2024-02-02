@@ -7,12 +7,13 @@ export const getCollections = async ({
     userId,
     page = 1,
     limit = 10
-}: IGetCollectionsProps): Promise<ICollection[] | Error> => {
+}: IGetCollectionsProps): Promise<{ collections: ICollection[] } | Error> => {
     try {
-        const collections = await Knex(ETableNames.collections)
+        const results = await Knex(ETableNames.collections)
             .select(
                 `${ETableNames.collections}.*`,
-                `${ETableNames.users}.username as author`
+                `${ETableNames.users}.username`,
+                `${ETableNames.users}.phoneNumber`
             )
             .join(
                 ETableNames.users,
@@ -25,13 +26,23 @@ export const getCollections = async ({
             .offset((page - 1) * limit)
             .limit(limit);
 
-        const modifiedCollections = collections.map(collection => ({
-            ...collection,
-            isPublic: collection.isPublic === 1 ? true : false,
-            showPhoneNumber: collection.showPhoneNumber === 1 ? true : false
+        const collections: ICollection[] = results.map(collection => ({
+            id: collection.id,
+            userId: collection.userId,
+            name: collection.name,
+            description: collection.description,
+            title: collection.title,
+            isPublic: collection.isPublic === 1,
+            isPublicPhoneNumber: collection.isPublicPhoneNumber === 1,
+            createdAt: collection.createdAt,
+            updatedAt: collection.updatedAt,
+            userData: {
+                username: collection.username,
+                phoneNumber: collection.phoneNumber
+            }
         }));
 
-        return modifiedCollections;
+        return { collections };
     } catch (error) {
         console.error(error);
         return new Error('Erro ao obter coleções para o usuário');

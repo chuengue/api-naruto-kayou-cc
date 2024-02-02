@@ -20,7 +20,7 @@ export const getAllPublicCollectionValidation = validation(getSchema => ({
         yup.object().shape({
             page: yup.number().optional().moreThan(0),
             limit: yup.number().optional().moreThan(0),
-            name: yup.string().optional().min(3),
+            collectionName: yup.string().optional().min(3),
             author: yup.string().optional().min(3)
         })
     )
@@ -32,9 +32,9 @@ export const getAllPublicCollection = async (
 ) => {
     const filters = {
         author: req.query.author || '',
-        name: req.query.name || '',
+        name: req.query.collectionName || '',
         page: req.query.page || 1,
-        limit: req.query.limit || 6
+        limit: req.query.limit || 10
     };
 
     const result =

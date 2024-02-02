@@ -16,14 +16,7 @@ export const create = async (
             return new Error(ProvidersErrors.FAILED_FETCH_INSERTED_COLLECTION);
         }
 
-        const collectionWithPhoneNumber = {
-            ...collection,
-            phoneNumber: user.phoneNumber
-        };
-
-        const result = await Knex(ETableNames.collections).insert(
-            collectionWithPhoneNumber
-        );
+        const result = await Knex(ETableNames.collections).insert(collection);
 
         if (result) {
             const lastInsertedCollection = await Knex.select('id')

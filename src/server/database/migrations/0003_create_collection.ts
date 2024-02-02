@@ -7,8 +7,7 @@ export const up = async (knex: Knex) => {
             table.uuid('id').defaultTo(knex.fn.uuid()).primary();
             table.uuid('userId').notNullable();
             table.string('name').notNullable().checkLength('>', 3);
-            table.string('phoneNumber').nullable();
-            table.boolean('showPhoneNumber').notNullable().defaultTo(false);
+            table.boolean('isPublicPhoneNumber').notNullable().defaultTo(false);
             table.string('description').nullable();
             table.boolean('isPublic').notNullable().defaultTo(false);
             table

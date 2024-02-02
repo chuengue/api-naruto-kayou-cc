@@ -22,7 +22,7 @@ export const createValidation = validation(getSchema => ({
             name: yup.string().required().min(3),
             description: yup.string().optional(),
             isPublic: yup.boolean().optional(),
-            showPhoneNumber: yup.boolean().optional()
+            isPublicPhoneNumber: yup.boolean().optional()
         })
     )
 }));

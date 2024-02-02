@@ -5,7 +5,10 @@ import { validation } from '../../shared/middleware';
 
 import * as yup from 'yup';
 import { CollectionProvider } from '../../database/providers/collections';
-import { IGetCollectionsProps, IGetWishListProps } from '../../database/providers/types';
+import {
+    IGetCollectionsProps,
+    IGetWishListProps
+} from '../../database/providers/types';
 import {
     CollectionErrors,
     GenericErrors,
@@ -26,7 +29,10 @@ export const getCollectionsValidation = validation(getSchema => ({
     )
 }));
 
-export const getCollections = async (req: Request<{}, {}, {}, IGetCollectionsProps>, res: Response) => {
+export const getCollections = async (
+    req: Request<{}, {}, {}, IGetCollectionsProps>,
+    res: Response
+) => {
     const CollectionsGetProps: IGetWishListProps = {
         page: req.query.page || 1,
         limit: req.query.limit || 10,
@@ -35,7 +41,9 @@ export const getCollections = async (req: Request<{}, {}, {}, IGetCollectionsPro
 
     const result = await CollectionProvider.getCollections(CollectionsGetProps);
 
-    const count = await CollectionProvider.countCollections(req.headers.userId as string);
+    const count = await CollectionProvider.countCollections(
+        req.headers.userId as string
+    );
 
     if (result instanceof Error) {
         return sendErrorResponse(
@@ -44,9 +52,13 @@ export const getCollections = async (req: Request<{}, {}, {}, IGetCollectionsPro
             TCollectionErrors(CollectionErrors.errorOnGet)
         );
     } else if (count instanceof Error) {
-        return sendErrorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, TGenericError(GenericErrors.CountError));
+        return sendErrorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            TGenericError(GenericErrors.CountError)
+        );
     }
-    if (result.length === 0) {
+    if (result.collections.length === 0) {
         return sendErrorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,
@@ -56,5 +68,12 @@ export const getCollections = async (req: Request<{}, {}, {}, IGetCollectionsPro
     res.setHeader('access-control-expose-headers', 'x-total-count');
     res.setHeader('x-total-count', count);
 
-    sendSuccessResponseList(res, StatusCodes.OK, result, count, req.query.page || 1, req.query.limit || 10);
+    sendSuccessResponseList(
+        res,
+        StatusCodes.OK,
+        result,
+        count,
+        req.query.page || 1,
+        req.query.limit || 10
+    );
 };
