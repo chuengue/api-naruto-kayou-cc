@@ -33,10 +33,10 @@ export const sendSuccessResponse = (
     ) {
         response = {
             ...response,
-            totalItems: totalItems,
-            itemsPerPage: resolveItemsPerPage(itemsPerPage, totalItems),
-            totalPages: Math.ceil(totalItems / itemsPerPage),
-            page: page
+            totalItems: Number(totalItems),
+            itemsPerPage: Number(resolveItemsPerPage(itemsPerPage, totalItems)),
+            totalPages: Number(Math.ceil(totalItems / itemsPerPage)),
+            page: Number(page)
         };
     } else if (typeof results === 'string') {
         response = {

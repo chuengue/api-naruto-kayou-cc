@@ -8,40 +8,36 @@ export const getPublicCollections = async ({
     name,
     author,
     page = 1,
-    limit = 10
-}: IPublicCollectionsProps): Promise<ICollection[] | Error> => {
+    limit = 6
+}: IPublicCollectionsProps): Promise<
+    { collections: ICollection[] } | Error
+> => {
     try {
-        const query = Knex(ETableNames.collections)
+        let query = Knex(ETableNames.collections)
             .select(
                 `${ETableNames.collections}.*`,
                 `${ETableNames.users}.username as author`,
                 Knex.raw(
-                    `CASE WHEN ${ETableNames.collections}.showPhoneNumber = true THEN ${ETableNames.collections}.phoneNumber END as phoneNumber`
+                    `CASE WHEN ${ETableNames.collections}.showPhoneNumber = true THEN ${ETableNames.collections}.phoneNumber ELSE null END as phoneNumber`
                 )
             )
             .where('isPublic', true)
             .join(ETableNames.users, 'collections.userId', '=', 'users.id')
             .orderBy('CreatedAt', 'desc');
 
-        if (name) {
-            query.where('name', 'like', `%${name}%`);
-        }
-
-        if (author) {
-            query.where('code', 'like', `%${author}%`);
-        }
+        if (name) query = query.where('name', 'like', `%${name}%`);
+        if (author)
+            query = query.where(
+                `${ETableNames.users}.username`,
+                'like',
+                `%${author}%`
+            );
 
         const result = await query.offset((page - 1) * limit).limit(limit);
 
-        const modifiedResult: ICollection[] = result.map(collection => ({
-            ...collection,
-            isPublic: collection.isPublic === 1 ? true : false,
-            showPhoneNumber: collection.showPhoneNumber === 1 ? true : false
-        }));
-
-        return modifiedResult;
+        return { collections: result };
     } catch (error) {
         console.error(error);
-        return new Error(SQLErrors.NOT_FOUND_REGISTER);
+        throw new Error(SQLErrors.NOT_FOUND_REGISTER);
     }
 };

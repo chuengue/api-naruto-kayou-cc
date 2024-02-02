@@ -9,9 +9,9 @@ import { IPublicCollectionsProps } from '../../database/providers/types';
 import {
     GenericErrors,
     getErrorMessage,
-    sendErrorResponse,
-    sendSuccessResponseList
+    sendErrorResponse
 } from '../../shared';
+import { sendSuccessResponse } from '../../shared/utils/SendSuccessResponse';
 
 const TGenericError = getErrorMessage('Errors.genericErrors');
 
@@ -20,8 +20,8 @@ export const getAllPublicCollectionValidation = validation(getSchema => ({
         yup.object().shape({
             page: yup.number().optional().moreThan(0),
             limit: yup.number().optional().moreThan(0),
-            name: yup.string().optional().min(1),
-            author: yup.string().optional().min(1)
+            name: yup.string().optional().min(3),
+            author: yup.string().optional().min(3)
         })
     )
 }));
@@ -34,7 +34,7 @@ export const getAllPublicCollection = async (
         author: req.query.author || '',
         name: req.query.name || '',
         page: req.query.page || 1,
-        limit: req.query.limit || 10
+        limit: req.query.limit || 6
     };
 
     const result =
@@ -56,10 +56,7 @@ export const getAllPublicCollection = async (
         );
     }
 
-    res.setHeader('access-control-expose-headers', 'x-total-count');
-    res.setHeader('x-total-count', count);
-
-    sendSuccessResponseList(
+    sendSuccessResponse(
         res,
         StatusCodes.OK,
         result,
