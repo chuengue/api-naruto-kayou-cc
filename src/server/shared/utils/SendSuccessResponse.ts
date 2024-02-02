@@ -1,5 +1,6 @@
 import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
+
 import { SuccessListResponse } from './types';
 
 const resolveItemsPerPage = (
@@ -12,7 +13,7 @@ const resolveItemsPerPage = (
     return itemsPerPage;
 };
 
-export const sendSuccessResponseList = (
+export const sendSuccessResponse = (
     res: Response,
     statusCode: StatusCodes,
     results: unknown,

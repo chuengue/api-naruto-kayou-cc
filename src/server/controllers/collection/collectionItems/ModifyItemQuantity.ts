@@ -1,13 +1,16 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
+
 import { CollectionProvider } from '../../../database/providers/collections';
 import {
     CollectionErrors,
     getErrorMessage,
     sendErrorResponse,
+    SQLErrors,
     validation
 } from '../../../shared';
+import { sendSuccessResponse } from '../../../shared/utils/SendSuccessResponse';
 import {
     IModifyQuantityItemCollectionBody,
     IModifyQuantityItemCollectionParams
@@ -42,22 +45,28 @@ export const modifyItemQuantity = async (
         cardId: req.params.cardId as string,
         newQuantity: req.body.newQuantity as number
     };
-    if (!req.params.collectionId) {
-        return sendErrorResponse(
-            res,
-            StatusCodes.BAD_REQUEST,
-            TCollectionErrors(CollectionErrors.errorOnUpdate)
-        );
-    }
 
     const result = await CollectionProvider.modifyItemQuantity(updateProps);
+
     if (result instanceof Error) {
-        return sendErrorResponse(
-            res,
-            StatusCodes.BAD_REQUEST,
-            TCollectionErrors(CollectionErrors.errorOnUpdate)
-        );
+        switch (result.message) {
+            case SQLErrors.NOT_FOUND_REGISTER:
+                return sendErrorResponse(
+                    res,
+                    StatusCodes.BAD_REQUEST,
+                    TCollectionErrors(
+                        CollectionErrors.ErrorCardOrCollectionNotFound
+                    )
+                );
+
+            default:
+                return sendErrorResponse(
+                    res,
+                    StatusCodes.BAD_REQUEST,
+                    TCollectionErrors(CollectionErrors.ErrorModifyQuantityItem)
+                );
+        }
     }
 
-    return res.status(StatusCodes.NO_CONTENT).send();
+    return sendSuccessResponse(res, StatusCodes.OK, result);
 };

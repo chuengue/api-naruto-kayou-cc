@@ -56,7 +56,9 @@ export enum CollectionErrors {
     ErrorAddItem = 4008,
     ErrorRemoveItem = 4009,
     NotFoundItem = 4010,
-    ErrorGetItemsCollections = 4011
+    ErrorGetItemsCollections = 4011,
+    ErrorModifyQuantityItem = 4012,
+    ErrorCardOrCollectionNotFound = 4013
 }
 export type AppErrors =
     | GenericErrors

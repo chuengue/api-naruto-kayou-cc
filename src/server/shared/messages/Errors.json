@@ -205,6 +205,14 @@
         {
             "code": 4011,
             "message": "Erro ao recuperar lista de cards da coleção."
+        },
+        {
+            "code": 4012,
+            "message": "Erro ao modificar quantidade do item."
+        },
+        {
+            "code": 4013,
+            "message": "Card ou coleção não encontrado."
         }
     ]
 }

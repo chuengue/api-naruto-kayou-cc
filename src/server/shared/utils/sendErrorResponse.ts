@@ -7,9 +7,7 @@ export const sendErrorResponse = (
     error: unknown
 ) => {
     return res.status(statusCode).json({
-        errorsResult: {
-            success: false,
-            error
-        }
+        success: false,
+        error
     });
 };
