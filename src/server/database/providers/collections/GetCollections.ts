@@ -27,7 +27,8 @@ export const getCollections = async ({
 
         const modifiedCollections = collections.map(collection => ({
             ...collection,
-            isPublic: collection.isPublic === 1 ? true : false
+            isPublic: collection.isPublic === 1 ? true : false,
+            showPhoneNumber: collection.showPhoneNumber === 1 ? true : false
         }));
 
         return modifiedCollections;

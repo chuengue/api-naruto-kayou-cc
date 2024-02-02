@@ -7,13 +7,22 @@ export const up = async (knex: Knex) => {
             table.uuid('id').defaultTo(knex.fn.uuid()).primary();
             table.uuid('userId').notNullable();
             table.string('name').notNullable().checkLength('>', 3);
+            table.string('phoneNumber').nullable();
+            table.boolean('showPhoneNumber').notNullable().defaultTo(false);
             table.string('description').nullable();
             table.boolean('isPublic').notNullable().defaultTo(false);
-            table.foreign('userId').references('id').inTable(ETableNames.users).onDelete('CASCADE').onUpdate('CASCADE');
+            table
+                .foreign('userId')
+                .references('id')
+                .inTable(ETableNames.users)
+                .onDelete('CASCADE')
+                .onUpdate('CASCADE');
             table.timestamp('createdAt').defaultTo(knex.fn.now());
             table.timestamp('updatedAt').defaultTo(knex.fn.now());
 
-            table.comment('Tabela usada para armazenar coleções dos usuários do sistema');
+            table.comment(
+                'Tabela usada para armazenar coleções dos usuários do sistema'
+            );
         })
         .then(() => {
             console.log(`# Create table ${ETableNames.collections}`);

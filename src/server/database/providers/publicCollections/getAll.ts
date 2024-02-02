@@ -14,7 +14,10 @@ export const getPublicCollections = async ({
         const query = Knex(ETableNames.collections)
             .select(
                 `${ETableNames.collections}.*`,
-                `${ETableNames.users}.username as author`
+                `${ETableNames.users}.username as author`,
+                Knex.raw(
+                    `CASE WHEN ${ETableNames.collections}.showPhoneNumber = true THEN ${ETableNames.collections}.phoneNumber END as phoneNumber`
+                )
             )
             .where('isPublic', true)
             .join(ETableNames.users, 'collections.userId', '=', 'users.id')
@@ -30,7 +33,13 @@ export const getPublicCollections = async ({
 
         const result = await query.offset((page - 1) * limit).limit(limit);
 
-        return result;
+        const modifiedResult: ICollection[] = result.map(collection => ({
+            ...collection,
+            isPublic: collection.isPublic === 1 ? true : false,
+            showPhoneNumber: collection.showPhoneNumber === 1 ? true : false
+        }));
+
+        return modifiedResult;
     } catch (error) {
         console.error(error);
         return new Error(SQLErrors.NOT_FOUND_REGISTER);
