@@ -90,7 +90,7 @@
     "registerErrors": [
         {
             "code": 1009,
-            "message": "E-mail já cadastrado"
+            "message": "E-mail ou Username já cadastrado "
         },
         {
             "code": 1020,

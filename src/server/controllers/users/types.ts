@@ -1,6 +1,7 @@
 import { IUser } from '../../database/models';
 
-export interface ISignUpUserBodyProps extends Omit<IUser, 'id' | 'updatedAt' | 'createdAt'> {}
+export interface ISignUpUserBodyProps
+    extends Omit<IUser, 'id' | 'updatedAt' | 'createdAt'> {}
 
 export interface ISignInUserBodyProps {
     identifier: string;
@@ -8,7 +9,7 @@ export interface ISignInUserBodyProps {
     firstName: string;
     lastName: string;
     email?: string;
-    phoneNumber: string;
+    phoneNumber?: string | null;
     password: string;
 }
 

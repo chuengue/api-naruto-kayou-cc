@@ -29,63 +29,86 @@ export const signInValidation = validation(getSchema => ({
     )
 }));
 
-export const signIn = async (req: Request<{}, {}, ISignInUserBodyProps>, res: Response) => {
+export const signIn = async (
+    req: Request<{}, {}, ISignInUserBodyProps>,
+    res: Response
+) => {
     const { identifier, password } = req.body;
 
-    let user: IUser | Error;
+    try {
+        let user: IUser | Error;
 
-    // Verificar se o identificador parece ser um email
-    if (identifier.includes('@')) {
-        user = await UsersProvider.getByEmail(identifier);
-    } else {
-        // Se não for um email, buscar pelo username
-        user = await UsersProvider.getByUsername(identifier);
-    }
-
-    // Verificar se user é uma instância de IUser
-    if (user instanceof Error) {
-        if (user.message === SQLErrors.GENERIC_DB_ERROR) {
-            return sendErrorResponse(
-                res,
-                StatusCodes.BAD_GATEWAY,
-                TGenericError(GenericErrors.DatabaseConnectionError)
-            );
-        } else if (user.message === SQLErrors.NOT_FOUND_REGISTER) {
-            return sendErrorResponse(res, StatusCodes.UNAUTHORIZED, TLoginError(LoginErrors.InvalidEmailOrPassword));
+        if (identifier.includes('@')) {
+            user = await UsersProvider.getByEmail(identifier);
         } else {
-            // Se houver outros erros, envie uma resposta genérica de erro
-            return sendErrorResponse(
-                res,
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                TGenericError(GenericErrors.ExternalServiceFailure)
-            );
+            user = await UsersProvider.getByUsername(identifier);
         }
-    }
 
-    // Aqui, temos certeza de que 'user' é uma instância de IUser
-    const passwordMatch = await PasswordCrypto.verifyPassword(password, user.password);
-    if (!passwordMatch) {
-        return sendErrorResponse(res, StatusCodes.UNAUTHORIZED, TLoginError(LoginErrors.InvalidEmailOrPassword));
-    }
-
-    const acessTokenResponse = JWTService.sign({ uid: user.id });
-    if (acessTokenResponse === EJWTErrors.SECRET_NOT_FOUND) {
-        sendErrorResponse(res, StatusCodes.UNAUTHORIZED, acessTokenResponse);
-    }
-
-    return res.status(StatusCodes.OK).json({
-        results: {
-            acessToken: acessTokenResponse,
-            user: {
-                id: user.id,
-                userName: user.username,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                phoneNumber: user.phoneNumber,
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt
+        if (user instanceof Error) {
+            switch (user.message) {
+                case SQLErrors.GENERIC_DB_ERROR:
+                    return sendErrorResponse(
+                        res,
+                        StatusCodes.BAD_GATEWAY,
+                        TGenericError(GenericErrors.DatabaseConnectionError)
+                    );
+                case SQLErrors.NOT_FOUND_REGISTER:
+                    return sendErrorResponse(
+                        res,
+                        StatusCodes.UNAUTHORIZED,
+                        TLoginError(LoginErrors.InvalidEmailOrPassword)
+                    );
+                default:
+                    return sendErrorResponse(
+                        res,
+                        StatusCodes.INTERNAL_SERVER_ERROR,
+                        TGenericError(GenericErrors.ExternalServiceFailure)
+                    );
             }
         }
-    });
+
+        const passwordMatch = await PasswordCrypto.verifyPassword(
+            password,
+            user.password
+        );
+        if (!passwordMatch) {
+            return sendErrorResponse(
+                res,
+                StatusCodes.UNAUTHORIZED,
+                TLoginError(LoginErrors.InvalidEmailOrPassword)
+            );
+        }
+
+        const accessToken = JWTService.sign({ uid: user.id });
+        if (accessToken === EJWTErrors.SECRET_NOT_FOUND) {
+            return sendErrorResponse(
+                res,
+                StatusCodes.UNAUTHORIZED,
+                accessToken
+            );
+        }
+
+        return res.status(StatusCodes.OK).json({
+            results: {
+                accessToken,
+                user: {
+                    id: user.id,
+                    userName: user.username,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    phoneNumber: user.phoneNumber,
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt
+                }
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        return sendErrorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            TGenericError(GenericErrors.InternalServerError)
+        );
+    }
 };

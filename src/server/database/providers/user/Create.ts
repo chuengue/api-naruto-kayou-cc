@@ -8,7 +8,9 @@ interface customError extends Error {
     code: string;
 }
 
-export const create = async (user: Omit<IUser, 'id'>): Promise<number | Error> => {
+export const create = async (
+    user: Omit<IUser, 'id'>
+): Promise<number | Error> => {
     try {
         const hashedPassword = await PasswordCrypto.hashPassword(user.password);
 
@@ -24,6 +26,7 @@ export const create = async (user: Omit<IUser, 'id'>): Promise<number | Error> =
         return new Error(SQLErrors.GENERIC_DB_ERROR);
     } catch (error) {
         const err = error as customError;
+        console.log(err);
         if (err.code === SQLErrors.DUPLICATE_REGISTER) {
             return new Error(SQLErrors.DUPLICATE_REGISTER);
         }
