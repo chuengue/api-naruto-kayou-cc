@@ -1,19 +1,21 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
+
 import { ETableNames } from '../../../database/ETableNames';
 import { CollectionProvider } from '../../../database/providers/collections';
+import { CountersProviders } from '../../../database/providers/counters/index';
 import {
     GenericErrors,
-    WishListErrors,
     getErrorMessage,
     sendErrorResponse,
     sendSuccessResponseList,
-    validation
+    validation,
+    WishListErrors
 } from '../../../shared';
 import { IGetAllCardsQueryProps } from '../../allCards/types';
-import { CountersProviders } from './../../../database/providers/counters/index';
 import { IGetAllCollectionItemsParams } from './types';
+
 const TGenericError = getErrorMessage('Errors.genericErrors');
 const TCardError = getErrorMessage('Errors.cardsErrors');
 const TWishlistError = getErrorMessage('Errors.wishListErrors');
