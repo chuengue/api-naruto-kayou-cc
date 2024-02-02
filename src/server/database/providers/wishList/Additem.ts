@@ -1,9 +1,16 @@
-import { ProvidersErrors, SQLErrors } from '../../../shared';
+import {
+    ProvidersErrors,
+    ProvidersSuccessMessage,
+    SQLErrors
+} from '../../../shared';
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 import { IAddItemProps } from '../types';
 
-export const addWishlistItem = async ({ userId, cardId }: IAddItemProps): Promise<void | Error> => {
+export const addWishlistItem = async ({
+    userId,
+    cardId
+}: IAddItemProps): Promise<string | Error> => {
     try {
         const existingItem = await Knex(ETableNames.wishList)
             .where({
@@ -23,7 +30,7 @@ export const addWishlistItem = async ({ userId, cardId }: IAddItemProps): Promis
             updatedAt: Knex.fn.now()
         });
 
-        return;
+        return ProvidersSuccessMessage.SUCCESS_INSERT;
     } catch (error) {
         console.error(error);
         return new Error(SQLErrors.GENERIC_DB_ERROR);

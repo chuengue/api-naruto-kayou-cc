@@ -76,8 +76,6 @@ export const getAll = async (
             TCardError(2001)
         );
     }
-    res.setHeader('access-control-expose-headers', 'x-total-count');
-    res.setHeader('x-total-count', count);
 
     sendSuccessResponseList(
         res,

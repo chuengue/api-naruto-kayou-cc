@@ -14,5 +14,7 @@ export enum ProvidersErrors {
     FAILED_UPDATE = 'FAILED_UPDATE'
 }
 export enum ProvidersSuccessMessage {
-    SUCCESS_UPDATE = 'SUCCESS_UPDATE'
+    SUCCESS_UPDATE = 'SUCCESS_UPDATE',
+    SUCCESS_REMOVE_ITEM = 'SUCCESS_REMOVE_ITEM',
+    SUCCESS_INSERT = 'SUCCESS_INSERT'
 }
