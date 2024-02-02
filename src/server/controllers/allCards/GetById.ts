@@ -25,22 +25,42 @@ export const getByIdValidation = validation(getSchema => ({
     )
 }));
 
-export const getById = async (req: Request<IGetByIdCardsParamProps>, res: Response) => {
+export const getById = async (
+    req: Request<IGetByIdCardsParamProps>,
+    res: Response
+) => {
     if (!req.params.cardId) {
-        return sendErrorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, TCardError(CardsErrors.NotFountCardId));
+        return sendErrorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            TCardError(CardsErrors.NotFountCardId)
+        );
     }
 
     const result = await CardsProviders.getById(req.params.cardId);
 
-    if (result instanceof Error && SQLErrors.NOT_FOUND_REGISTER) {
-        return sendErrorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, TGenericError(GenericErrors.RecordNotFound));
+    if (result instanceof Error) {
+        switch (result.message) {
+            case SQLErrors.NOT_FOUND_REGISTER:
+                return sendErrorResponse(
+                    res,
+                    StatusCodes.INTERNAL_SERVER_ERROR,
+                    TGenericError(GenericErrors.RecordNotFound)
+                );
+            case SQLErrors.GENERIC_DB_ERROR:
+                return sendErrorResponse(
+                    res,
+                    StatusCodes.INTERNAL_SERVER_ERROR,
+                    TGenericError(GenericErrors.InternalServerError)
+                );
+            default:
+                return sendErrorResponse(
+                    res,
+                    StatusCodes.INTERNAL_SERVER_ERROR,
+                    TGenericError(GenericErrors.InternalServerError)
+                );
+        }
     }
-    if (result instanceof Error && SQLErrors.GENERIC_DB_ERROR) {
-        return sendErrorResponse(
-            res,
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            TGenericError(GenericErrors.InternalServerError)
-        );
-    }
+
     sendSuccessResponseList(res, StatusCodes.OK, result);
 };

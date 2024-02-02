@@ -6,7 +6,12 @@ import { validation } from '../../shared/middleware';
 import * as yup from 'yup';
 import { CardsProviders } from '../../database/providers/allCards';
 import { IFilterListCardProps } from '../../database/providers/types';
-import { GenericErrors, getErrorMessage, sendErrorResponse, sendSuccessResponseList } from '../../shared';
+import {
+    GenericErrors,
+    getErrorMessage,
+    sendErrorResponse,
+    sendSuccessResponseList
+} from '../../shared';
 import { IGetAllCardsQueryProps } from './types';
 
 const TGenericError = getErrorMessage('Errors.genericErrors');
@@ -25,7 +30,10 @@ export const getAllValidation = validation(getSchema => ({
     )
 }));
 
-export const getAll = async (req: Request<{}, {}, {}, IGetAllCardsQueryProps>, res: Response) => {
+export const getAll = async (
+    req: Request<{}, {}, {}, IGetAllCardsQueryProps>,
+    res: Response
+) => {
     const filters: IFilterListCardProps = {
         code: req.query.code || '',
         box: req.query.box || '',
@@ -40,15 +48,33 @@ export const getAll = async (req: Request<{}, {}, {}, IGetAllCardsQueryProps>, r
     const count = await CardsProviders.count(filters);
 
     if (result instanceof Error) {
-        return sendErrorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, TGenericError(1006));
-    } else if (count instanceof Error) {
-        return sendErrorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, TGenericError(GenericErrors.CountError));
+        return sendErrorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            TGenericError(1006)
+        );
+    }
+    if (count instanceof Error) {
+        return sendErrorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            TGenericError(GenericErrors.CountError)
+        );
     }
     if (result.length === 0) {
-        return sendErrorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, TCardError(2001));
+        return sendErrorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            TCardError(2001)
+        );
     }
-    res.setHeader('access-control-expose-headers', 'x-total-count');
-    res.setHeader('x-total-count', count);
 
-    sendSuccessResponseList(res, StatusCodes.OK, result, count, req.query.page || 1, req.query.limit || 10);
+    sendSuccessResponseList(
+        res,
+        StatusCodes.OK,
+        result,
+        count,
+        req.query.page || 1,
+        req.query.limit || 10
+    );
 };

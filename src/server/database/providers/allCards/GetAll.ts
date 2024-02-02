@@ -13,23 +13,11 @@ export const getAll = async ({
     limit
 }: IFilterListCardProps): Promise<iCard[] | Error> => {
     try {
-        const query = Knex(ETableNames.narutoCards).select('*');
-
-        if (name) {
-            query.where('name', 'like', `%${name}%`);
-        }
-
-        if (code) {
-            query.where('code', 'like', `%${code}%`);
-        }
-
-        if (rarity) {
-            query.where('rarity', '=', rarity);
-        }
-
-        if (box) {
-            query.where('box', 'like', `%${box}%`);
-        }
+        let query = Knex(ETableNames.narutoCards).select('*');
+        if (name) query = query.where('name', 'like', `%${name}%`);
+        if (code) query = query.where('code', 'like', `%${code}%`);
+        if (rarity) query = query.where('rarity', '=', rarity);
+        if (box) query = query.where('box', 'like', `%${box}%`);
 
         const result = await query.offset((page - 1) * limit).limit(limit);
 
