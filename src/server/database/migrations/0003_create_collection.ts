@@ -6,9 +6,10 @@ export const up = async (knex: Knex) => {
         .createTable(ETableNames.collections, table => {
             table.uuid('id').defaultTo(knex.fn.uuid()).primary();
             table.uuid('userId').notNullable();
-            table.string('name').notNullable().checkLength('>', 3);
+            table.string('title').notNullable().checkLength('>', 3);
             table.boolean('isPublicPhoneNumber').notNullable().defaultTo(false);
             table.string('description').nullable();
+            table.integer('collectionType').notNullable();
             table.boolean('isPublic').notNullable().defaultTo(false);
             table
                 .foreign('userId')

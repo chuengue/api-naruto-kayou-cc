@@ -5,7 +5,7 @@ import { ICollection } from '../../models';
 import { IPublicCollectionsProps } from '../types';
 
 export const getPublicCollections = async ({
-    collectionName,
+    title,
     author,
     page = 1,
     limit = 10
@@ -25,8 +25,9 @@ export const getPublicCollections = async ({
             .join(ETableNames.users, 'collections.userId', '=', 'users.id')
             .orderBy('CreatedAt', 'desc');
 
-        if (collectionName)
-            query = query.where('name', 'like', `%${collectionName}%`);
+        if (title) {
+            query = query.where('title', 'like', `%${title}%`);
+        }
         if (author)
             query = query.where(
                 `${ETableNames.users}.username`,
@@ -39,9 +40,9 @@ export const getPublicCollections = async ({
         const collections = result.map(collection => ({
             id: collection.id,
             userId: collection.userId,
-            name: collection.name,
-            description: collection.description,
             title: collection.title,
+            description: collection.description,
+            collectionType: collection.collectionType,
             isPublic: collection.isPublic === 1,
             isPublicPhoneNumber: collection.isPublicPhoneNumber === 1,
             createdAt: collection.createdAt,

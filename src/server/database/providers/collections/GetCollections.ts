@@ -29,9 +29,9 @@ export const getCollections = async ({
         const collections: ICollection[] = results.map(collection => ({
             id: collection.id,
             userId: collection.userId,
-            name: collection.name,
-            description: collection.description,
             title: collection.title,
+            description: collection.description,
+            collectionType: collection.collectionType,
             isPublic: collection.isPublic === 1,
             isPublicPhoneNumber: collection.isPublicPhoneNumber === 1,
             createdAt: collection.createdAt,

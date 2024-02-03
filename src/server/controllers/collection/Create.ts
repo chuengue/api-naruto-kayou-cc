@@ -19,10 +19,11 @@ const TCollectionErrors = getErrorMessage('Errors.collectionErrors');
 export const createValidation = validation(getSchema => ({
     body: getSchema<Omit<ICreateCollectionBodyProps, 'userId'>>(
         yup.object().shape({
-            name: yup.string().required().min(3),
+            title: yup.string().required().min(3),
             description: yup.string().optional(),
             isPublic: yup.boolean().optional(),
-            isPublicPhoneNumber: yup.boolean().optional()
+            isPublicPhoneNumber: yup.boolean().optional(),
+            collectionType: yup.number().required()
         })
     )
 }));

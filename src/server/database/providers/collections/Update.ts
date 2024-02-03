@@ -3,7 +3,7 @@ import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 
 export const updateCollection = async ({
-    name,
+    title,
     description,
     isPublic,
     collectionId
@@ -11,7 +11,7 @@ export const updateCollection = async ({
     try {
         const updateData: { [key: string]: unknown } = {};
 
-        if (name !== null) updateData.name = name;
+        if (title !== null) updateData.title = title;
         if (description !== null) updateData.description = description;
         if (description !== null) updateData.isPublic = isPublic;
         updateData.updatedAt = Knex.fn.now();
@@ -19,7 +19,9 @@ export const updateCollection = async ({
             throw new Error('Nenhum campo fornecido para atualização');
         }
 
-        const result = await Knex(ETableNames.collections).where('id', collectionId).update(updateData);
+        const result = await Knex(ETableNames.collections)
+            .where('id', collectionId)
+            .update(updateData);
 
         if (result > 0) return;
 

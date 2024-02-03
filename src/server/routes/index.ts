@@ -3,6 +3,7 @@ import { UsersController } from '../controllers';
 import { cardsController } from '../controllers/allCards';
 import { CollectionController } from '../controllers/collection';
 import { ItemCollectionControllers } from '../controllers/collection/collectionItems';
+import { findLackingControllers } from '../controllers/findLacking';
 import { PublicCollectionsControllers } from '../controllers/publicCollections';
 import { WishListControllers } from '../controllers/wishList';
 import { ensureAuthenticated } from '../shared';
@@ -110,4 +111,13 @@ router.patch(
     ItemCollectionControllers.modifyItemQuantityValidation,
     ItemCollectionControllers.modifyItemQuantity
 );
+
+//LACKING LIST
+
+router.post(
+    '/api/lacking-list/:collectionId/',
+    ensureAuthenticated,
+    findLackingControllers.createLackingCollection
+);
+
 export { router };

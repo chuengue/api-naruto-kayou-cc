@@ -1,9 +1,10 @@
 export interface ICollection {
     id: string;
     userId: string;
-    name?: string;
+    title?: string;
     description?: string;
     isPublicPhoneNumber?: boolean;
+    collectionType: number;
     isPublic?: boolean;
     createdAt?: string;
     updatedAt?: string;

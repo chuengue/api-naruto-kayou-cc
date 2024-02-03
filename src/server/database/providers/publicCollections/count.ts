@@ -3,7 +3,7 @@ import { Knex } from '../../knex';
 import { IPublicCollectionsProps } from '../types';
 
 export const count = async ({
-    collectionName,
+    title,
     author
 }: IPublicCollectionsProps): Promise<number | Error> => {
     try {
@@ -25,7 +25,7 @@ export const count = async ({
                     `%${author}%`
                 );
 
-        if (collectionName) query = query.andWhere('name', 'like', `%${name}%`);
+        if (title) query = query.andWhere('title', 'like', `%${title}%`);
 
         const [{ count }] = await query;
 
