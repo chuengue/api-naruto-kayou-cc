@@ -24,7 +24,7 @@ export const addItemToCollectionValidation = validation(getSchema => ({
     ),
     body: getSchema<IAddItemCollectionBody>(
         yup.object().shape({
-            listCardsId: yup.array().required().length(1),
+            listCardsId: yup.array().required().min(1),
             cardQuantity: yup.number().optional()
         })
     )
