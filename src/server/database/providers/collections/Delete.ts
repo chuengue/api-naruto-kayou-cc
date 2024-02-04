@@ -3,7 +3,10 @@ import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 import { IDeleteCollectionProps } from '../types';
 
-export const deleteCollection = async ({ userId, collectionId }: IDeleteCollectionProps): Promise<void | Error> => {
+export const deleteCollection = async ({
+    userId,
+    collectionId
+}: IDeleteCollectionProps): Promise<string | Error> => {
     try {
         const collection = await Knex(ETableNames.collections)
             .where({
@@ -23,7 +26,7 @@ export const deleteCollection = async ({ userId, collectionId }: IDeleteCollecti
             })
             .del();
 
-        console.log(`Coleção ${collectionId} excluída com sucesso.`);
+        return `Coleção ${collectionId} excluída com sucesso.`;
     } catch (error) {
         console.error(error);
         return new Error(SQLErrors.GENERIC_DB_ERROR);

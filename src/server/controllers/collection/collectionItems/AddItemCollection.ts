@@ -19,8 +19,13 @@ const TCollectionErrors = getErrorMessage('Errors.collectionErrors');
 export const addItemToCollectionValidation = validation(getSchema => ({
     params: getSchema<IAddItemCollectionProps>(
         yup.object().shape({
-            cardId: yup.string().required().length(36),
             collectionId: yup.string().required().length(36)
+        })
+    ),
+    body: getSchema<IAddItemCollectionBody>(
+        yup.object().shape({
+            listCardsId: yup.array().required().length(1),
+            cardQuantity: yup.number().optional()
         })
     )
 }));
@@ -31,7 +36,7 @@ export const addItemToCollection = async (
 ) => {
     const addItemParams = {
         userId: req.headers.userId as string,
-        cardId: req.params.cardId as string,
+        listCardsId: req.body.listCardsId,
         collectionId: req.params.collectionId,
         quantity: req.body.cardQuantity
     };
@@ -61,5 +66,5 @@ export const addItemToCollection = async (
                 );
         }
     }
-    return sendSuccessResponseList(res, StatusCodes.CREATED, result);
+    return sendSuccessResponseList(res, StatusCodes.OK, result);
 };

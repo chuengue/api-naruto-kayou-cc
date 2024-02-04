@@ -88,7 +88,7 @@ router.put(
 
 //COLLECTION ITEMS
 router.post(
-    '/api/collections/:collectionId/:cardId',
+    '/api/collections/:collectionId',
     ensureAuthenticated,
     ItemCollectionControllers.addItemToCollectionValidation,
     ItemCollectionControllers.addItemToCollection

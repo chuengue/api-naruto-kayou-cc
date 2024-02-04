@@ -1,34 +1,46 @@
-import { ProvidersErrors, SQLErrors } from '../../../../shared';
+import { SQLErrors } from '../../../../shared';
+import findExistingItemOrNotInCollection from '../../../../shared/utils/findExistingItemOrNotInCollection';
 import { ETableNames } from '../../../ETableNames';
 import { Knex } from '../../../knex';
 import { IAddItemCollection } from '../../types';
+import { IResultAddition } from './types';
 
 export const addItemCollection = async ({
     userId,
-    cardId,
+    listCardsId,
     collectionId,
     quantity
-}: IAddItemCollection): Promise<string | Error> => {
+}: IAddItemCollection): Promise<IResultAddition | Error> => {
     try {
-        const existingItem = await Knex(ETableNames.collectionsItems)
-            .where({
+        const itemsToAdd = await findExistingItemOrNotInCollection({
+            userId,
+            collectionId,
+            listCardsId
+        });
+        if (itemsToAdd instanceof Error) {
+            return new Error(
+                'Erro ao verificar quais cards já estão cadastrados nessa coleção'
+            );
+        }
+        const itemsPreExistents = itemsToAdd?.existingItems.length;
+        const formattedItemsToAdd = itemsToAdd?.nonExistingItems.map(
+            (cardId: string) => ({
                 userId: userId,
                 cardId: cardId,
-                collectionId: collectionId
+                collectionId: collectionId,
+                quantity: quantity || 1
             })
-            .first();
+        );
 
-        if (existingItem) {
-            return new Error(ProvidersErrors.ALREADY_EXISTS_IN_COLLECTION);
+        if (formattedItemsToAdd.length > 0) {
+            await Knex(ETableNames.collectionsItems).insert(
+                formattedItemsToAdd
+            );
         }
-        await Knex(ETableNames.collectionsItems).insert({
-            userId: userId,
-            cardId: cardId,
-            collectionId: collectionId,
-            quantity: quantity || 1
-        });
-
-        return 'Item adicionado a coleção com sucessos';
+        return {
+            insertedItems: formattedItemsToAdd.length,
+            notInsertedItems: itemsPreExistents
+        };
     } catch (error) {
         console.error(error);
         return new Error(SQLErrors.GENERIC_DB_ERROR);

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { ETableNames } from '../../database/ETableNames';
 import { ICollection, iCard } from '../../database/models';
 import { lackingProviders } from '../../database/providers/lacking';
 import { IGetAllCollectionItem } from '../../database/providers/types';
@@ -45,22 +46,32 @@ const listCollectionCards = async (collectionId: string): Promise<string[]> => {
     }
 };
 
-export const findLackingCards = async (collectionId: string) => {
+export const findLackingCards = async (
+    collectionId: string,
+    comparisonTable: string
+) => {
     try {
         const collectionCards = await listCollectionCards(collectionId);
-        const lackingList =
-            await lackingProviders.findLackingCards(collectionCards);
 
-        return lackingList;
+        const lackingList = await lackingProviders.findLackingCards(
+            comparisonTable,
+            'id',
+            collectionCards
+        );
+        if (lackingList instanceof Error) {
+            throw Error('Erro ao gerar lista');
+        }
+        const idsArray = lackingList.map(({ id }) => id);
+        return idsArray;
     } catch (error) {
-        console.error('Erro ao comparar:', error);
+        console.error('Erro ao com arar:', error);
     }
 };
 export const createLackingCollection = async (
     req: Request<{ collectionId: string }, {}, { title: string }>,
     res: Response
 ) => {
-    await findLackingCards(req.params.collectionId);
+    await findLackingCards(req.params.collectionId, ETableNames.narutoCards);
     const userId = req.headers.userId as string;
 
     const createCollection = await createLackingCollectionService({

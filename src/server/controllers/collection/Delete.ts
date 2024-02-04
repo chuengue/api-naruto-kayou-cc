@@ -4,7 +4,12 @@ import * as yup from 'yup';
 
 import { CollectionProvider } from '../../database/providers/collections';
 import { IDeleteCollectionProps } from '../../database/providers/types';
-import { CollectionErrors, ProvidersErrors, getErrorMessage, sendErrorResponse } from '../../shared';
+import {
+    CollectionErrors,
+    ProvidersErrors,
+    getErrorMessage,
+    sendErrorResponse
+} from '../../shared';
 import { validation } from '../../shared/middleware';
 const TCollectionErrors = getErrorMessage('Errors.collectionErrors');
 
@@ -16,7 +21,10 @@ export const deleteCollectionValidation = validation(getSchema => ({
     )
 }));
 
-export const deleteCollection = async (req: Request<Partial<IDeleteCollectionProps>>, res: Response) => {
+export const deleteCollection = async (
+    req: Request<Partial<IDeleteCollectionProps>>,
+    res: Response
+) => {
     const addItemParams = {
         userId: req.headers.userId as string,
         collectionId: req.params.collectionId as string
@@ -33,5 +41,5 @@ export const deleteCollection = async (req: Request<Partial<IDeleteCollectionPro
         );
     }
 
-    return res.status(StatusCodes.NO_CONTENT).send();
+    return sendErrorResponse(res, StatusCodes.OK, result);
 };

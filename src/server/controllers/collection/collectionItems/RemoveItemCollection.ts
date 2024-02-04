@@ -18,14 +18,14 @@ const TCollectionErrors = getErrorMessage('Errors.collectionErrors');
 export const removeItemCollectionValidation = validation(getSchema => ({
     params: getSchema<IRemoveItemCollection>(
         yup.object().shape({
-            cardId: yup.string().required().length(32),
-            collectionId: yup.string().required().length(32)
+            cardId: yup.string().required().length(36),
+            collectionId: yup.string().required().length(36)
         })
     )
 }));
 
 export const removeItemCollection = async (
-    req: Request<IRemoveItemCollection>,
+    req: Request<any, any, IRemoveItemCollection>,
     res: Response
 ) => {
     const removeItemParams = {

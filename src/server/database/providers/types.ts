@@ -33,13 +33,14 @@ export interface IPublicCollectionsProps {
 
 export interface IAddItemCollection {
     userId: string;
-    cardId: string;
+    listCardsId: string[];
     collectionId: string;
     quantity?: number;
 }
-
-export interface IRemoveItemCollection
-    extends Omit<IAddItemCollection, 'quantity' | 'userId'> {}
+export interface IRemoveItemCollection {
+    cardId: string;
+    collectionId: string;
+}
 
 export interface IGetAllCollectionItem extends IFilterListCardProps {
     collectionId: string;

@@ -1,10 +1,11 @@
 import { IAddItemCollection } from '../../../database/providers/types';
 
 export interface IAddItemCollectionProps
-    extends Omit<IAddItemCollection, 'userId' | 'quantity'> {}
+    extends Omit<IAddItemCollection, 'userId' | 'quantity' | 'listCardsId'> {}
 
 export interface IAddItemCollectionBody {
     cardQuantity?: number;
+    listCardsId: string[];
 }
 
 export interface IGetAllCollectionItemsParams {
