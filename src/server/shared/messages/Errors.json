@@ -213,6 +213,10 @@
         {
             "code": 4013,
             "message": "Card ou coleção não encontrado."
+        },
+        {
+            "code": 4014,
+            "message": "Não foi possível adicionar o item. O ID informado não existe."
         }
     ]
 }

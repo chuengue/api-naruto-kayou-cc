@@ -58,6 +58,12 @@ export const addItemToCollection = async (
                         CollectionErrors.AlreadyExistsInCollection
                     )
                 );
+            case SQLErrors.NOT_FOUND_REGISTER:
+                return sendErrorResponse(
+                    res,
+                    StatusCodes.CONFLICT,
+                    TCollectionErrors(CollectionErrors.ErrorAddIdNotExist)
+                );
             default:
                 return sendErrorResponse(
                     res,

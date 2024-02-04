@@ -41,8 +41,11 @@ export const addItemCollection = async ({
             insertedItems: formattedItemsToAdd.length,
             notInsertedItems: itemsPreExistents
         };
-    } catch (error) {
+    } catch (error: any) {
         console.error(error);
+        if (error.code === 'ER_NO_REFERENCED_ROW_2' && error.errno === 1452) {
+            return new Error(SQLErrors.NOT_FOUND_REGISTER);
+        }
         return new Error(SQLErrors.GENERIC_DB_ERROR);
     }
 };
