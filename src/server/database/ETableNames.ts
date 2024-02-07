@@ -3,5 +3,6 @@ export enum ETableNames {
     wishList = 'wishlist',
     narutoCards = 'naruto_cards',
     collections = 'collections',
-    collectionsItems = ' collections_items'
+    collectionsItems = ' collections_items',
+    roles = 'roles'
 }

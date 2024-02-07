@@ -5,6 +5,7 @@ import { CollectionController } from '../controllers/collection';
 import { ItemCollectionControllers } from '../controllers/collection/collectionItems';
 import { findLackingControllers } from '../controllers/findLacking';
 import { PublicCollectionsControllers } from '../controllers/publicCollections';
+import { roleControllers } from '../controllers/roles';
 import { WishListControllers } from '../controllers/wishList';
 import { ensureAuthenticated } from '../shared';
 
@@ -118,6 +119,15 @@ router.post(
     '/api/lacking-list/:collectionId/',
     ensureAuthenticated,
     findLackingControllers.createLackingCollection
+);
+
+//ROLES
+
+router.post(
+    '/api/create-role',
+    ensureAuthenticated,
+    roleControllers.createValidation,
+    roleControllers.create
 );
 
 export { router };
