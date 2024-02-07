@@ -1,55 +1,41 @@
 import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import { ETableNames } from '../../database/ETableNames';
-import { ICollection, iCard } from '../../database/models';
+import { iCard } from '../../database/models';
 import { lackingProviders } from '../../database/providers/lacking';
 import { IGetAllCollectionItem } from '../../database/providers/types';
+import { sendErrorResponse } from '../../shared';
+import { sendSuccessResponse } from '../../shared/utils/SendSuccessResponse';
 import { CollectionProvider } from './../../database/providers/collections/index';
-interface CollectionFilters extends IGetAllCollectionItem {
+interface getAllCollectionsItemsProps extends IGetAllCollectionItem {
     collectionId: string;
 }
 
-export const getAllCollections = async (
-    filters: CollectionFilters
+export const getAllCollectionsItems = async (
+    filters: getAllCollectionsItemsProps
 ): Promise<iCard[] | Error> => {
     return CollectionProvider.getAllCollectionItem(filters);
 };
 
-export const createLackingCollectionService = async (
-    collection: Omit<ICollection, 'id'>
-): Promise<unknown | Error> => {
-    const result = await CollectionProvider.create(collection);
-    return result;
-};
-
 const listCollectionCards = async (collectionId: string): Promise<string[]> => {
-    const filters: CollectionFilters = {
+    const filters: getAllCollectionsItemsProps = {
         collectionId,
-        code: '',
-        box: '',
-        rarity: '',
-        name: '',
         page: 1,
         limit: 99999
     };
+    const cardsCollectionList = await getAllCollectionsItems(filters);
 
-    try {
-        const cardsCollectionList = await getAllCollections(filters);
-
-        if (cardsCollectionList instanceof Error) {
-            throw Error('Erro ao consulta list de cards na coleção');
-        }
-        const idsArray = cardsCollectionList.map(({ id }) => id);
-        return idsArray;
-    } catch (error) {
-        console.error('Erro ao listar os cartões da coleção:', error);
-        throw error;
+    if (cardsCollectionList instanceof Error) {
+        throw Error('Erro ao consulta list de cards na coleção');
     }
+
+    return cardsCollectionList.map(({ id }) => id);
 };
 
 export const findLackingCards = async (
     collectionId: string,
     comparisonTable: string
-) => {
+): Promise<string[]> => {
     try {
         const collectionCards = await listCollectionCards(collectionId);
 
@@ -61,24 +47,42 @@ export const findLackingCards = async (
         if (lackingList instanceof Error) {
             throw Error('Erro ao gerar lista');
         }
-        const idsArray = lackingList.map(({ id }) => id);
-        return idsArray;
+        return lackingList.map(({ id }) => id);
     } catch (error) {
-        console.error('Erro ao com arar:', error);
+        throw Error('Erro ao gerar lista');
     }
 };
+
 export const createLackingCollection = async (
     req: Request<{ collectionId: string }, {}, { title: string }>,
     res: Response
 ) => {
-    await findLackingCards(req.params.collectionId, ETableNames.narutoCards);
-    const userId = req.headers.userId as string;
+    try {
+        const userId = req.headers.userId as string;
 
-    const createCollection = await createLackingCollectionService({
-        title: req.body.title,
-        collectionType: 2,
-        userId: userId
-    });
-    res.send(createCollection);
-    return createCollection;
+        const listCardsId = await findLackingCards(
+            req.params.collectionId,
+            ETableNames.narutoCards
+        );
+
+        const newCollection = await CollectionProvider.create({
+            title: req.body.title,
+            collectionType: 2,
+            userId: userId
+        });
+
+        const addItemsToNewCollection =
+            await CollectionProvider.addItemCollection({
+                userId,
+                listCardsId,
+                collectionId: String(newCollection)
+            });
+
+        sendSuccessResponse(res, StatusCodes.OK, {
+            addItemsToNewCollection,
+            newCollectionId: newCollection
+        });
+    } catch (error: any) {
+        sendErrorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error);
+    }
 };

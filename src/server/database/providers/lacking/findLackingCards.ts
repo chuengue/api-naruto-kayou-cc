@@ -1,18 +1,15 @@
 import { SQLErrors } from '../../../shared';
 import { Knex } from '../../knex';
-import { iCard } from '../../models/card';
 
 export const findLackingCards = async (
     comparisonTable: string,
     comparisonParameter: string,
     idList: string[]
-): Promise<iCard[] | Error> => {
-    console.log({ comparisonTable, comparisonParameter, idList });
+): Promise<any[] | Error> => {
     try {
         const result = Knex(comparisonTable)
-            .select('*')
+            .select([comparisonParameter])
             .whereNotIn(comparisonParameter, idList);
-        console.log((await result).length);
         return result;
     } catch (error) {
         console.error(error);
