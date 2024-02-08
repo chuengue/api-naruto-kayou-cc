@@ -54,6 +54,7 @@ export interface IModifyQuantityItemProps {
     newQuantity: number;
 }
 export interface IChangePrivacyProps {
+    userId: string;
     collectionId: string;
-    newPrivacy: boolean;
+    newPrivacy: number;
 }

@@ -1,3 +1,4 @@
+import * as changePrivacy from './ChangePrivacy';
 import * as count from './Count';
 import * as create from './Create';
 import * as deleteCollection from './Delete';
@@ -17,5 +18,6 @@ export const CollectionProvider = {
     ...addItemCollection,
     ...removeItemCollection,
     ...getAllCollectionItem,
-    ...modifyItemQuantity
+    ...modifyItemQuantity,
+    ...changePrivacy
 };

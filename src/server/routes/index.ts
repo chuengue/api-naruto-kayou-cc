@@ -88,6 +88,13 @@ router.put(
     CollectionController.updateCollection
 );
 
+router.patch(
+    '/api/collections',
+    ensureAuthenticated,
+    CollectionController.changeCollectionValidation,
+    CollectionController.changeCollectionPrivacy
+);
+
 //COLLECTION ITEMS
 router.post(
     '/api/collections/:collectionId',
