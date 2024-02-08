@@ -9,8 +9,6 @@ export const changePrivacy = async ({
     newPrivacy
 }: IChangePrivacyProps) => {
     try {
-        console.log({ newPrivacy });
-
         await Knex(ETableNames.collections)
             .where('id', collectionId)
             .andWhere('userId', userId)

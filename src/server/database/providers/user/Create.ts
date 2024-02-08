@@ -38,8 +38,6 @@ export const create = async (
                 userId: newUser.id,
                 roleId: roleIdToInsert
             });
-
-            console.log(existingRole);
         } else {
             return new Error('Papel fornecido não encontrado');
         }

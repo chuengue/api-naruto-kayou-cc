@@ -48,7 +48,6 @@ export const getUser = async (
         }
         return new Error(SQLErrors.NOT_FOUND_REGISTER);
     } catch (error) {
-        console.log(error);
         return new Error(SQLErrors.GENERIC_DB_ERROR);
     }
 };

@@ -28,7 +28,6 @@ export const addUserRoles = async ({
 
             if (existingRole) {
                 roleIdToInsert = existingRole.id;
-                console.log(existingRole);
             } else {
                 return new Error('Papel fornecido não encontrado');
             }

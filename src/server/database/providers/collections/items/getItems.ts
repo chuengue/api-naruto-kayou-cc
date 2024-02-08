@@ -14,7 +14,6 @@ export const getAllCollectionItem = async ({
     page,
     limit
 }: IGetAllCollectionItem): Promise<iCard[] | Error> => {
-    console.log({ userId });
     try {
         let query = Knex(ETableNames.collectionsItems)
             .select(

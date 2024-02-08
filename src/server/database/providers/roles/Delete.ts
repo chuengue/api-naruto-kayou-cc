@@ -3,7 +3,6 @@ import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 
 export const deleteRole = async (roleId: string) => {
-    console.log(roleId);
     try {
         const roleExist = await Knex(ETableNames.roles)
             .where({
@@ -14,7 +13,6 @@ export const deleteRole = async (roleId: string) => {
         if (!roleExist) {
             throw new Error(SQLErrors.NOT_FOUND_REGISTER);
         }
-        console.log('bateu');
         await Knex(ETableNames.roles)
             .where({
                 id: roleId
