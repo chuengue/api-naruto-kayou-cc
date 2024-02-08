@@ -10050,7 +10050,9 @@ const cards = [
 ];
 
 export const seed = async (knex: Knex) => {
-    const [{ count }] = await knex(ETableNames.narutoCards).count<[{ count: number }]>('* as count');
+    const [{ count }] = await knex(ETableNames.narutoCards).count<
+        [{ count: number }]
+    >('* as count');
     if (!Number.isInteger(count) || Number(count) > 0) return;
 
     const cardsToInsert = cards.map(card => ({

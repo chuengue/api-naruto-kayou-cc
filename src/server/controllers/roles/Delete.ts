@@ -15,7 +15,7 @@ import { validation } from '../../shared/middleware';
 const TGenericErrors = getErrorMessage('Errors.genericErrors');
 
 export const deleteValidation = validation(getSchema => ({
-    body: getSchema<Omit<IRole, 'roleName' | 'createdAt'>>(
+    params: getSchema<Omit<IRole, 'roleName' | 'createdAt'>>(
         yup.object().shape({
             id: yup.string().required()
         })
@@ -25,31 +25,35 @@ export const deleteRole = async (
     req: Request<Omit<IRole, 'roleName' | 'createdAt'>>,
     res: Response
 ) => {
-    const result = await roleProviders.deleteRole(req.params.id as string);
+    try {
+        if (!req.headers.roles?.includes('super_admin')) {
+            throw Error('OPERATION_NOT_ALLOWED');
+        }
 
-    if (result instanceof Error) {
-        switch (result.message) {
+        await roleProviders.deleteRole(req.params.id as string);
+
+        return res.sendStatus(StatusCodes.OK);
+    } catch (error: any) {
+        switch (error.message) {
+            case 'OPERATION_NOT_ALLOWED':
+                return sendErrorResponse(
+                    res,
+                    StatusCodes.BAD_REQUEST,
+                    TGenericErrors(GenericErrors.OperationNotAllowed)
+                );
             case SQLErrors.NOT_FOUND_REGISTER:
                 return sendErrorResponse(
                     res,
-                    StatusCodes.CONFLICT,
+                    StatusCodes.BAD_REQUEST,
                     TGenericErrors(GenericErrors.RecordNotFound)
                 );
 
-            case SQLErrors.GENERIC_DB_ERROR:
-                return sendErrorResponse(
-                    res,
-                    StatusCodes.BAD_GATEWAY,
-                    TGenericErrors(GenericErrors.InternalServerError)
-                );
             default:
                 return sendErrorResponse(
                     res,
-                    StatusCodes.INTERNAL_SERVER_ERROR,
-                    result.message
+                    StatusCodes.BAD_GATEWAY,
+                    error.message
                 );
         }
     }
-
-    return res.send(StatusCodes.OK);
 };

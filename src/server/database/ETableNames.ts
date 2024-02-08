@@ -4,5 +4,6 @@ export enum ETableNames {
     narutoCards = 'naruto_cards',
     collections = 'collections',
     collectionsItems = ' collections_items',
-    roles = 'roles'
+    roles = 'roles',
+    usersRoles = 'users_roles'
 }

@@ -2,7 +2,8 @@ import { SQLErrors } from '../../../shared';
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 
-export const deleteRole = async (roleId: string): Promise<void | Error> => {
+export const deleteRole = async (roleId: string) => {
+    console.log(roleId);
     try {
         const roleExist = await Knex(ETableNames.roles)
             .where({
@@ -11,15 +12,15 @@ export const deleteRole = async (roleId: string): Promise<void | Error> => {
             .first();
 
         if (!roleExist) {
-            return new Error(SQLErrors.NOT_FOUND_REGISTER);
+            throw new Error(SQLErrors.NOT_FOUND_REGISTER);
         }
-
-        await Knex(ETableNames.collections)
+        console.log('bateu');
+        await Knex(ETableNames.roles)
             .where({
                 id: roleId
             })
             .del();
-    } catch (error) {
-        return new Error(SQLErrors.GENERIC_DB_ERROR);
+    } catch (error: any) {
+        throw new Error(error.message);
     }
 };

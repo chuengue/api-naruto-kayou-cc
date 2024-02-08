@@ -2,8 +2,7 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
 
-import { IUser } from '../../database/models';
-import { UsersProvider } from '../../database/providers/user';
+import { UsersProviders } from '../../database/providers/user';
 import {
     GenericErrors,
     JWTService,
@@ -15,6 +14,8 @@ import {
     validation
 } from '../../shared';
 import { EJWTErrors } from '../../shared/services/JWTService/types';
+import { IUserResponse } from '../../shared/types';
+import { sendSuccessResponse } from '../../shared/utils/SendSuccessResponse';
 import { ISignInUserBodyProps, ISignInUserBodyPropsValidation } from './types';
 
 const TLoginError = getErrorMessage('Errors.loginErrors');
@@ -36,12 +37,16 @@ export const signIn = async (
     const { identifier, password } = req.body;
 
     try {
-        let user: IUser | Error;
+        let user: IUserResponse | Error;
 
         if (identifier.includes('@')) {
-            user = await UsersProvider.getByEmail(identifier);
+            user = await UsersProviders.getUser({
+                email: req.body.identifier
+            });
         } else {
-            user = await UsersProvider.getByUsername(identifier);
+            user = await UsersProviders.getUser({
+                username: req.body.identifier
+            });
         }
 
         if (user instanceof Error) {
@@ -78,8 +83,10 @@ export const signIn = async (
                 TLoginError(LoginErrors.InvalidEmailOrPassword)
             );
         }
-
-        const accessToken = JWTService.sign({ uid: user.id });
+        const accessToken = JWTService.sign({
+            uid: user.id,
+            roles: user.roles
+        });
         if (accessToken === EJWTErrors.SECRET_NOT_FOUND) {
             return sendErrorResponse(
                 res,
@@ -87,20 +94,18 @@ export const signIn = async (
                 accessToken
             );
         }
-
-        return res.status(StatusCodes.OK).json({
-            results: {
-                accessToken,
-                user: {
-                    id: user.id,
-                    userName: user.username,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.email,
-                    phoneNumber: user.phoneNumber,
-                    createdAt: user.createdAt,
-                    updatedAt: user.updatedAt
-                }
+        sendSuccessResponse(res, StatusCodes.OK, {
+            accessToken,
+            user: {
+                id: user.id,
+                userName: user.username,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                phoneNumber: user.phoneNumber,
+                roles: user.roles,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt
             }
         });
     } catch (error) {

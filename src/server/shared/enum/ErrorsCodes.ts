@@ -9,7 +9,8 @@ export enum GenericErrors {
     RateLimitExceeded = 1013,
     InvalidAccessToken = 1014,
     ExternalServiceFailure = 1015,
-    CountError = 2002
+    CountError = 2002,
+    DuplicateRegister = 1016
 }
 
 export enum LoginErrors {
@@ -61,6 +62,7 @@ export enum CollectionErrors {
     ErrorCardOrCollectionNotFound = 4013,
     ErrorAddIdNotExist = 4014
 }
+
 export type AppErrors =
     | GenericErrors
     | LoginErrors

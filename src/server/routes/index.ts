@@ -7,7 +7,8 @@ import { findLackingControllers } from '../controllers/findLacking';
 import { PublicCollectionsControllers } from '../controllers/publicCollections';
 import { roleControllers } from '../controllers/roles';
 import { WishListControllers } from '../controllers/wishList';
-import { ensureAuthenticated } from '../shared';
+import { checkUserRole, ensureAuthenticated } from '../shared';
+import { usersRoleControllers } from './../controllers/usersRole/index';
 
 const router = Router();
 //LOGIN
@@ -124,10 +125,26 @@ router.post(
 //ROLES
 
 router.post(
-    '/api/create-role',
+    '/api/role',
     ensureAuthenticated,
+    checkUserRole(['super_admin']),
     roleControllers.createValidation,
     roleControllers.create
 );
+router.delete(
+    '/api/role/:id',
+    checkUserRole(['super_admin']),
+    ensureAuthenticated,
+    roleControllers.deleteValidation,
+    roleControllers.deleteRole
+);
 
+//USERSROLES
+
+router.post(
+    '/api/users-role/:userId/:roleId',
+    ensureAuthenticated,
+    usersRoleControllers.addUserRolesValidation,
+    usersRoleControllers.addUserRoles
+);
 export { router };

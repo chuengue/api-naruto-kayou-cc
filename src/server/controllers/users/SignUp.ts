@@ -3,7 +3,7 @@ import { validation } from '../../shared/middleware';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
-import { UsersProvider } from '../../database/providers/user';
+import { UsersProviders } from '../../database/providers/user';
 import {
     GenericErrors,
     RegisterErrors,
@@ -42,8 +42,7 @@ export const signUp = async (
     req: Request<{}, {}, ISignUpUserBodyProps>,
     res: Response
 ) => {
-    const newUser = await UsersProvider.create(req.body);
-
+    const newUser = await UsersProviders.create(req.body);
     if (newUser instanceof Error) {
         switch (newUser.message) {
             case SQLErrors.GENERIC_DB_ERROR:

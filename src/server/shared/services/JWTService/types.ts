@@ -1,5 +1,6 @@
 export interface IJwtData {
     uid: string;
+    roles: string[];
 }
 
 export enum EJWTErrors {

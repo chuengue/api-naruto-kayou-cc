@@ -7,7 +7,6 @@ import { roleProviders } from '../../database/providers/roles';
 import {
     GenericErrors,
     getErrorMessage,
-    ProvidersErrors,
     sendErrorResponse,
     SQLErrors
 } from '../../shared';
@@ -27,28 +26,26 @@ export const create = async (
     req: Request<{}, {}, Omit<IRole, 'id' | 'createdAt'>>,
     res: Response
 ) => {
-    const result = await roleProviders.create({ roleName: req.body.roleName });
+    try {
+        await roleProviders.create({
+            roleName: req.body.roleName
+        });
 
-    if (
-        result instanceof Error &&
-        result.message === SQLErrors.GENERIC_DB_ERROR
-    ) {
-        return sendErrorResponse(
-            res,
-            StatusCodes.BAD_GATEWAY,
-            TGenericErrors(GenericErrors.InternalServerError)
-        );
+        res.sendStatus(StatusCodes.CREATED);
+    } catch (error: any) {
+        switch (error.message) {
+            case SQLErrors.DUPLICATE_REGISTER:
+                return sendErrorResponse(
+                    res,
+                    StatusCodes.INTERNAL_SERVER_ERROR,
+                    TGenericErrors(GenericErrors.DuplicateRegister)
+                );
+            default:
+                return sendErrorResponse(
+                    res,
+                    StatusCodes.BAD_GATEWAY,
+                    TGenericErrors(GenericErrors.InternalServerError)
+                );
+        }
     }
-
-    if (
-        result instanceof Error &&
-        result.message === ProvidersErrors.FAILED_FETCH_INSERTED_COLLECTION
-    ) {
-        return sendErrorResponse(
-            res,
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            result.message
-        );
-    }
-    res.send(StatusCodes.CREATED);
 };

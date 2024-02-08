@@ -43,6 +43,10 @@
         {
             "code": 2002,
             "message": "Erro ao consultar a quantidade total de registros"
+        },
+        {
+            "code": 1016,
+            "message": "Registro informado já existe banco de dados"
         }
     ],
     "loginErrors": [
