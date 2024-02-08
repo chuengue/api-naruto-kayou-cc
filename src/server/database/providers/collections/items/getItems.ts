@@ -1,3 +1,4 @@
+import { SQLErrors } from '../../../../shared';
 import { ETableNames } from '../../../ETableNames';
 import { Knex } from '../../../knex';
 import { iCard } from '../../../models';
@@ -5,6 +6,7 @@ import { IGetAllCollectionItem } from '../../types';
 
 export const getAllCollectionItem = async ({
     collectionId,
+    userId,
     name,
     code,
     rarity,
@@ -12,6 +14,7 @@ export const getAllCollectionItem = async ({
     page,
     limit
 }: IGetAllCollectionItem): Promise<iCard[] | Error> => {
+    console.log({ userId });
     try {
         let query = Knex(ETableNames.collectionsItems)
             .select(
@@ -27,6 +30,7 @@ export const getAllCollectionItem = async ({
                 `${ETableNames.narutoCards}.id`
             )
             .where(`${ETableNames.collectionsItems}.collectionId`, collectionId)
+            .where(`${ETableNames.collectionsItems}.userId`, userId)
             .orderBy('createdAt', 'desc');
         if (name) {
             query = query.where(
@@ -62,9 +66,13 @@ export const getAllCollectionItem = async ({
 
         const result = await query.offset((page - 1) * limit).limit(limit);
 
+        if (!result.length) {
+            return new Error(SQLErrors.NOT_FOUND_REGISTER);
+        }
+
         return result;
     } catch (error) {
         console.error(error);
-        return new Error('Erro ao obter itens dessa coleção');
+        return new Error(SQLErrors.GENERIC_DB_ERROR);
     }
 };

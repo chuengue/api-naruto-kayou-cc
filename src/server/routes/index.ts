@@ -143,6 +143,7 @@ router.delete(
 
 router.post(
     '/api/users-role/:userId/:roleId',
+    checkUserRole(['super_admin']),
     ensureAuthenticated,
     usersRoleControllers.addUserRolesValidation,
     usersRoleControllers.addUserRoles

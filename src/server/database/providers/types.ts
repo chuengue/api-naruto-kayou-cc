@@ -43,11 +43,17 @@ export interface IRemoveItemCollection {
 }
 
 export interface IGetAllCollectionItem extends IFilterListCardProps {
+    userId: string;
     collectionId: string;
 }
 
 export interface IModifyQuantityItemProps {
     collectionId: string;
     cardId: string;
+    userId: string;
     newQuantity: number;
+}
+export interface IChangePrivacyProps {
+    collectionId: string;
+    newPrivacy: boolean;
 }

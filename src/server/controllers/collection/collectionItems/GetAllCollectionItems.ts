@@ -10,6 +10,7 @@ import {
     getErrorMessage,
     sendErrorResponse,
     sendSuccessResponseList,
+    SQLErrors,
     validation,
     WishListErrors
 } from '../../../shared';
@@ -44,6 +45,7 @@ export const getAllCollectionItems = async (
 ) => {
     const getAllCollectionProps = {
         collectionId: req.params.collectionId as string,
+        userId: req.headers.userId as string,
         code: req.query.code || '',
         box: req.query.box || '',
         rarity: req.query.rarity || '',
@@ -61,26 +63,37 @@ export const getAllCollectionItems = async (
         { collectionId: req.params.collectionId as string },
         getAllCollectionProps
     );
+
     if (result instanceof Error) {
-        return sendErrorResponse(
-            res,
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            TWishlistError(WishListErrors.ErrorGetWishlist)
-        );
-    } else if (count instanceof Error) {
+        switch (result.message) {
+            case SQLErrors.GENERIC_DB_ERROR:
+                return sendErrorResponse(
+                    res,
+                    StatusCodes.INTERNAL_SERVER_ERROR,
+                    TWishlistError(WishListErrors.ErrorGetWishlist)
+                );
+            case SQLErrors.NOT_FOUND_REGISTER:
+                return sendErrorResponse(
+                    res,
+                    StatusCodes.NOT_FOUND,
+                    TWishlistError(WishListErrors.ItemNotExistingWishList)
+                );
+            default:
+                return sendErrorResponse(
+                    res,
+                    StatusCodes.INTERNAL_SERVER_ERROR,
+                    TWishlistError(WishListErrors.ErrorGetWishlist)
+                );
+        }
+    }
+    if (count instanceof Error) {
         return sendErrorResponse(
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,
             TGenericError(GenericErrors.CountError)
         );
     }
-    if (result.length === 0) {
-        return sendErrorResponse(
-            res,
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            TCardError(2001)
-        );
-    }
+
     res.setHeader('access-control-expose-headers', 'x-total-count');
     res.setHeader('x-total-count', count);
 

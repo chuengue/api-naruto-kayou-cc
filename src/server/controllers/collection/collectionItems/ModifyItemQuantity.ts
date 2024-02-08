@@ -43,13 +43,14 @@ export const modifyItemQuantity = async (
     const updateProps = {
         collectionId: req.params.collectionId as string,
         cardId: req.params.cardId as string,
-        newQuantity: req.body.newQuantity as number
+        newQuantity: req.body.newQuantity as number,
+        userId: req.headers.userId as string
     };
 
-    const result = await CollectionProvider.modifyItemQuantity(updateProps);
-
-    if (result instanceof Error) {
-        switch (result.message) {
+    try {
+        await CollectionProvider.modifyItemQuantity(updateProps);
+    } catch (error: any) {
+        switch (error.message) {
             case SQLErrors.NOT_FOUND_REGISTER:
                 return sendErrorResponse(
                     res,
@@ -68,5 +69,5 @@ export const modifyItemQuantity = async (
         }
     }
 
-    return sendSuccessResponse(res, StatusCodes.OK, result);
+    return sendSuccessResponse(res, StatusCodes.OK, 'CREATED');
 };

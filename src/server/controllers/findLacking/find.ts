@@ -17,16 +17,20 @@ export const getAllCollectionsItems = async (
     return CollectionProvider.getAllCollectionItem(filters);
 };
 
-const listCollectionCards = async (collectionId: string): Promise<string[]> => {
+const listCollectionCards = async (
+    collectionId: string,
+    userId: string
+): Promise<string[]> => {
     const filters: getAllCollectionsItemsProps = {
         collectionId,
+        userId,
         page: 1,
         limit: 99999
     };
     const cardsCollectionList = await getAllCollectionsItems(filters);
 
     if (cardsCollectionList instanceof Error) {
-        throw Error('Erro ao consulta list de cards na coleção');
+        throw Error('Erro ao consulta lista de cards na coleção');
     }
 
     return cardsCollectionList.map(({ id }) => id);
@@ -34,10 +38,11 @@ const listCollectionCards = async (collectionId: string): Promise<string[]> => {
 
 export const findLackingCards = async (
     collectionId: string,
+    userId: string,
     comparisonTable: string
 ): Promise<string[]> => {
     try {
-        const collectionCards = await listCollectionCards(collectionId);
+        const collectionCards = await listCollectionCards(collectionId, userId);
 
         const lackingList = await lackingProviders.findLackingCards(
             comparisonTable,
@@ -48,8 +53,8 @@ export const findLackingCards = async (
             throw Error('Erro ao gerar lista');
         }
         return lackingList.map(({ id }) => id);
-    } catch (error) {
-        throw Error('Erro ao gerar lista');
+    } catch (error: any) {
+        throw Error(error.message);
     }
 };
 
@@ -62,6 +67,7 @@ export const createLackingCollection = async (
 
         const listCardsId = await findLackingCards(
             req.params.collectionId,
+            req.headers.userId as string,
             ETableNames.narutoCards
         );
 
@@ -83,6 +89,10 @@ export const createLackingCollection = async (
             newCollectionId: newCollection
         });
     } catch (error: any) {
-        sendErrorResponse(res, StatusCodes.INTERNAL_SERVER_ERROR, error);
+        sendErrorResponse(
+            res,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            error.message
+        );
     }
 };
