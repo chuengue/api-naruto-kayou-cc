@@ -18,7 +18,7 @@ export interface IUser {
 
 export const getUser = async (
     query: Record<string, string>
-): Promise<IUserResponse | Error> => {
+): Promise<IUserResponse> => {
     const [type] = Object.keys(query);
     const identifier = query[type];
     try {
@@ -27,7 +27,7 @@ export const getUser = async (
                 `${ETableNames.users}.*`,
                 Knex.raw(`GROUP_CONCAT(${ETableNames.roles}.roleName) as roles`)
             )
-            .where(type, '=', identifier)
+            .where(`${ETableNames.users}.${type}`, '=', identifier)
             .join(
                 ETableNames.usersRoles,
                 `${ETableNames.usersRoles}.userId`,
@@ -46,8 +46,8 @@ export const getUser = async (
             result.roles = result.roles ? result.roles.split(',') : [];
             return result;
         }
-        return new Error(SQLErrors.NOT_FOUND_REGISTER);
-    } catch (error) {
-        return new Error(SQLErrors.GENERIC_DB_ERROR);
+        throw new Error(SQLErrors.NOT_FOUND_REGISTER);
+    } catch (error: any) {
+        throw new Error(error.message);
     }
 };

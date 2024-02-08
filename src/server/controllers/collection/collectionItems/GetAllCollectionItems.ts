@@ -18,7 +18,6 @@ import { IGetAllCardsQueryProps } from '../../allCards/types';
 import { IGetAllCollectionItemsParams } from './types';
 
 const TGenericError = getErrorMessage('Errors.genericErrors');
-const TCardError = getErrorMessage('Errors.cardsErrors');
 const TWishlistError = getErrorMessage('Errors.wishListErrors');
 
 export const getAllCollectionItemsValidation = validation(getSchema => ({

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { UsersController } from '../controllers';
 import { cardsController } from '../controllers/allCards';
 import { CollectionController } from '../controllers/collection';
@@ -22,6 +23,10 @@ router.post(
     UsersController.signUpValidation,
     UsersController.signUp
 );
+
+//WHOAMI
+
+router.get('/api/whoami', ensureAuthenticated, UsersController.whoami);
 
 //ALL-CARDS
 router.get(
@@ -155,4 +160,5 @@ router.post(
     usersRoleControllers.addUserRolesValidation,
     usersRoleControllers.addUserRoles
 );
+
 export { router };

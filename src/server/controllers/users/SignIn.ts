@@ -5,12 +5,12 @@ import * as yup from 'yup';
 import { UsersProviders } from '../../database/providers/user';
 import {
     GenericErrors,
+    getErrorMessage,
     JWTService,
     LoginErrors,
     PasswordCrypto,
-    SQLErrors,
-    getErrorMessage,
     sendErrorResponse,
+    SQLErrors,
     validation
 } from '../../shared';
 import { EJWTErrors } from '../../shared/services/JWTService/types';
@@ -49,29 +49,6 @@ export const signIn = async (
             });
         }
 
-        if (user instanceof Error) {
-            switch (user.message) {
-                case SQLErrors.GENERIC_DB_ERROR:
-                    return sendErrorResponse(
-                        res,
-                        StatusCodes.BAD_GATEWAY,
-                        TGenericError(GenericErrors.DatabaseConnectionError)
-                    );
-                case SQLErrors.NOT_FOUND_REGISTER:
-                    return sendErrorResponse(
-                        res,
-                        StatusCodes.UNAUTHORIZED,
-                        TLoginError(LoginErrors.InvalidEmailOrPassword)
-                    );
-                default:
-                    return sendErrorResponse(
-                        res,
-                        StatusCodes.INTERNAL_SERVER_ERROR,
-                        TGenericError(GenericErrors.ExternalServiceFailure)
-                    );
-            }
-        }
-
         const passwordMatch = await PasswordCrypto.verifyPassword(
             password,
             user.password
@@ -108,12 +85,27 @@ export const signIn = async (
                 updatedAt: user.updatedAt
             }
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error(error);
-        return sendErrorResponse(
-            res,
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            TGenericError(GenericErrors.InternalServerError)
-        );
+        switch (error.message) {
+            case SQLErrors.GENERIC_DB_ERROR:
+                return sendErrorResponse(
+                    res,
+                    StatusCodes.BAD_GATEWAY,
+                    TGenericError(GenericErrors.DatabaseConnectionError)
+                );
+            case SQLErrors.NOT_FOUND_REGISTER:
+                return sendErrorResponse(
+                    res,
+                    StatusCodes.UNAUTHORIZED,
+                    TLoginError(LoginErrors.InvalidEmailOrPassword)
+                );
+            default:
+                return sendErrorResponse(
+                    res,
+                    StatusCodes.INTERNAL_SERVER_ERROR,
+                    error.message
+                );
+        }
     }
 };
