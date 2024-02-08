@@ -39,6 +39,20 @@ router.get(
     cardsController.getByIdValidation,
     cardsController.getById
 );
+router.post(
+    '/api/naruto-cards',
+    ensureAuthenticated,
+    checkUserRole(['admin', 'super_admin']),
+    cardsController.CreateCardValidation,
+    cardsController.createCard
+);
+router.delete(
+    '/api/naruto-cards/:cardId',
+    ensureAuthenticated,
+    checkUserRole(['admin', 'super_admin']),
+    cardsController.deleteCardValidation,
+    cardsController.deleteCard
+);
 
 //WISHLIST
 router.get(

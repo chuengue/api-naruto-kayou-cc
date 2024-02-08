@@ -9,3 +9,6 @@ export interface IGetAllCardsQueryProps {
 export interface IGetByIdCardsParamProps {
     cardId?: string;
 }
+export interface DeleteCardParamProps {
+    cardId: string;
+}

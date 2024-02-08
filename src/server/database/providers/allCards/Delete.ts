@@ -2,20 +2,20 @@ import { SQLErrors } from '../../../shared';
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 
-export const deleteRole = async (roleId: string) => {
+export const deleteCard = async (cardId: string) => {
     try {
-        const cardExist = await Knex(ETableNames.roles)
+        const roleExist = await Knex(ETableNames.narutoCards)
             .where({
-                id: roleId
+                id: cardId
             })
             .first();
 
-        if (!cardExist) {
+        if (!roleExist) {
             throw new Error(SQLErrors.NOT_FOUND_REGISTER);
         }
-        await Knex(ETableNames.roles)
+        await Knex(ETableNames.narutoCards)
             .where({
-                id: roleId
+                id: cardId
             })
             .del();
     } catch (error: any) {
