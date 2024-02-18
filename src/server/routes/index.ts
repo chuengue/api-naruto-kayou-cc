@@ -11,6 +11,16 @@ import { WishListControllers } from '../controllers/wishList';
 import { checkUserRole, ensureAuthenticated } from '../shared';
 import { usersRoleControllers } from './../controllers/usersRole/index';
 
+// const yourMiddlewareHere : RequestHandler = async (req, res, next) => {
+//     // Adicione um atraso de 2 segundos (2000 milissegundos) para teste
+//     setTimeout(() => {
+//         // Aqui você pode realizar qualquer lógica de middleware necessária
+//         // Depois de concluído, chame next() para continuar com o próximo middleware ou rota
+//         next();
+//     }, 700); // Ajuste o tempo conforme necessário
+// };
+
+
 const router = Router();
 //LOGIN
 router.post(

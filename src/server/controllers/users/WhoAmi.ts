@@ -10,7 +10,6 @@ export const whoami: RequestHandler = async (req, res) => {
     try {
         const user = await UsersProviders.getUser({ id: userId });
         sendSuccessResponse(res, StatusCodes.OK, {
-            user: {
                 id: user.id,
                 userName: user.username,
                 firstName: user.firstName,
@@ -20,7 +19,6 @@ export const whoami: RequestHandler = async (req, res) => {
                 roles: user.roles,
                 createdAt: user.createdAt,
                 updatedAt: user.updatedAt
-            }
         });
     } catch (error: any) {
         console.log(error);
