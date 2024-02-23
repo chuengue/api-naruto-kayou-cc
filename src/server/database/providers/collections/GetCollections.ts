@@ -13,7 +13,8 @@ export const getCollections = async ({
             .select(
                 `${ETableNames.collections}.*`,
                 `${ETableNames.users}.username`,
-                `${ETableNames.users}.phoneNumber`
+                `${ETableNames.users}.phoneNumber`,
+                Knex.raw(`(SELECT COUNT(*) FROM ${ETableNames.collectionsItems} WHERE ${ETableNames.collectionsItems}.collectionId = collections.id) AS cardQuantity`)
             )
             .join(
                 ETableNames.users,
@@ -36,6 +37,7 @@ export const getCollections = async ({
             isPublicPhoneNumber: collection.isPublicPhoneNumber === 1,
             createdAt: collection.createdAt,
             updatedAt: collection.updatedAt,
+            cardQuantity: collection.cardQuantity,
             userData: {
                 username: collection.username,
                 phoneNumber: collection.phoneNumber
