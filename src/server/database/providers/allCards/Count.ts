@@ -6,7 +6,9 @@ export const count = async ({
     rarity,
     box,
     code,
-    name
+    name,
+    searchQuery
+
 }: IFilterListCardProps): Promise<number | Error> => {
     try {
         let query = Knex(ETableNames.narutoCards).count('* as count');
@@ -15,6 +17,12 @@ export const count = async ({
         if (box) query = query.andWhere('box', 'like', `%${box}%`);
         if (code) query = query.andWhere('code', 'like', `%${code}%`);
         if (name) query = query.andWhere('name', 'like', `%${name}%`);
+        if (searchQuery && searchQuery.trim() !== '') {
+            query = query.where(function() {
+                this.where('name', 'like', `%${searchQuery}%`)
+                    .orWhere('code', 'like', `%${searchQuery}%`);
+            });
+        }
 
         const [{ count }] = await query;
 

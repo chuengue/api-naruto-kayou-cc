@@ -5,15 +5,7 @@ import * as yup from 'yup';
 import { ETableNames } from '../../../database/ETableNames';
 import { CollectionProvider } from '../../../database/providers/collections';
 import { CountersProviders } from '../../../database/providers/counters/index';
-import {
-    GenericErrors,
-    getErrorMessage,
-    sendErrorResponse,
-    sendSuccessResponseList,
-    SQLErrors,
-    validation,
-    WishListErrors
-} from '../../../shared';
+import { GenericErrors, getErrorMessage, sendErrorResponse, sendSuccessResponseList, SQLErrors, validation, WishListErrors } from '../../../shared';
 import { IGetAllCardsQueryProps } from '../../allCards/types';
 import { IGetAllCollectionItemsParams } from './types';
 
@@ -28,7 +20,8 @@ export const getAllCollectionItemsValidation = validation(getSchema => ({
             name: yup.string().optional().min(1),
             code: yup.string().optional().min(1),
             box: yup.string().optional().min(1),
-            rarity: yup.string().optional().min(1)
+            rarity: yup.string().optional().min(1),
+            searchQuery: yup.string().optional()
         })
     ),
     params: getSchema<IGetAllCollectionItemsParams>(

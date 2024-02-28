@@ -5,6 +5,7 @@ export interface IFilterListCardProps {
     box?: string;
     name?: string;
     rarity?: string;
+    searchQuery?: string;
 }
 export interface IGetWishListProps extends IFilterListCardProps {
     userId: string;

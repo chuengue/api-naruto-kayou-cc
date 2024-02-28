@@ -1,20 +1,13 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { WishListProviders } from './../../database/providers/wishList/index';
-
-import { validation } from '../../shared/middleware';
-
 import * as yup from 'yup';
+
 import { ETableNames } from '../../database/ETableNames';
 import { CountersProviders } from '../../database/providers/counters';
-import {
-    GenericErrors,
-    WishListErrors,
-    getErrorMessage,
-    sendErrorResponse,
-    sendSuccessResponseList
-} from '../../shared';
+import { GenericErrors, getErrorMessage, sendErrorResponse, sendSuccessResponseList, WishListErrors } from '../../shared';
+import { validation } from '../../shared/middleware';
 import { IGetAllCardsQueryProps } from '../allCards/types';
+import { WishListProviders } from './../../database/providers/wishList/index';
 
 const TGenericError = getErrorMessage('Errors.genericErrors');
 const TCardError = getErrorMessage('Errors.cardsErrors');
@@ -28,7 +21,8 @@ export const getAllValidation = validation(getSchema => ({
             name: yup.string().optional().min(1),
             code: yup.string().optional().min(1),
             box: yup.string().optional().min(1),
-            rarity: yup.string().optional().min(1)
+            rarity: yup.string().optional().min(1),
+            searchQuery: yup.string().optional().min(1)
         })
     )
 }));
@@ -44,6 +38,7 @@ export const getAll = async (
         name: req.query.name || '',
         page: req.query.page || 1,
         limit: req.query.limit || 10,
+        searchQuery: req.query.searchQuery || '',
         userId: req.headers.userId as string
     };
 

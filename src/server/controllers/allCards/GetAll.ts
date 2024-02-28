@@ -19,7 +19,8 @@ export const getAllValidation = validation(getSchema => ({
             name: yup.string().optional(),
             code: yup.string().optional(),
             box: yup.string().optional(),
-            rarity: yup.string().optional()
+            rarity: yup.string().optional(),
+            searchQuery: yup.string().optional()
         })
     )
 }));
@@ -34,9 +35,9 @@ export const getAll = async (
         rarity: req.query.rarity || '',
         name: req.query.name || '',
         page: req.query.page || 1,
-        limit: req.query.limit || 10
+        limit: req.query.limit || 10,
+        searchQuery: req.query.searchQuery || ''
     };
-    console.log(!!req.query.code);
     const result = await CardsProviders.getAll(filters);
 
     const count = await CardsProviders.count(filters);

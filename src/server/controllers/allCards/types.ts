@@ -5,6 +5,8 @@ export interface IGetAllCardsQueryProps {
     code?: string;
     rarity?: string;
     box?: string;
+    searchQuery?: string;
+
 }
 export interface IGetByIdCardsParamProps {
     cardId?: string;

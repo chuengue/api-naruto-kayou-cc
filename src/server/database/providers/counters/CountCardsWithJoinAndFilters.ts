@@ -5,7 +5,7 @@ import { IFilterListCardProps } from '../types';
 export const countCardsWithJoinAndFilters = async (
     mainTableName: string,
     whereParam: Record<string, string>,
-    { box, code, rarity, name }: IFilterListCardProps
+    { box, code, rarity, name , searchQuery}: IFilterListCardProps
 ): Promise<number | Error> => {
     try {
         const query = Knex(mainTableName)
@@ -44,6 +44,13 @@ export const countCardsWithJoinAndFilters = async (
                 'like',
                 `%${name}%`
             );
+        }
+        
+        if (searchQuery && searchQuery.trim() !== '') {
+            query.where(function() {
+                this.where('name', 'like', `%${searchQuery}%`)
+                    .orWhere('code', 'like', `%${searchQuery}%`);
+            });
         }
 
         const [{ count }] =
