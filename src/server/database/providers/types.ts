@@ -25,8 +25,7 @@ export interface IDeleteCollectionProps {
     collectionId: string;
 }
 export interface IPublicCollectionsProps {
-    title?: string;
-    author?: string;
+    searchQuery?: string
     page?: number;
     limit?: number;
 }

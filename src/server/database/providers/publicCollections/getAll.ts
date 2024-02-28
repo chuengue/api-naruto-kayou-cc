@@ -5,13 +5,10 @@ import { ICollection } from '../../models';
 import { IPublicCollectionsProps } from '../types';
 
 export const getPublicCollections = async ({
-    title,
-    author,
+    searchQuery,
     page = 1,
     limit = 10
-}: IPublicCollectionsProps): Promise<
-    { collections: ICollection[] } | Error
-> => {
+}: IPublicCollectionsProps): Promise<{ collections: ICollection[] } | Error> => {
     try {
         let query = Knex(ETableNames.collections)
             .select(
@@ -19,21 +16,19 @@ export const getPublicCollections = async ({
                 `${ETableNames.users}.username as author`,
                 Knex.raw(
                     `CASE WHEN ${ETableNames.collections}.isPublicPhoneNumber = true THEN ${ETableNames.users}.phoneNumber ELSE null END as phoneNumber`
-                )
+                ),
+                Knex.raw(`(SELECT COUNT(*) FROM ${ETableNames.collectionsItems} WHERE ${ETableNames.collectionsItems}.collectionId = collections.id) AS cardQuantity`)
             )
             .where('isPublic', true)
             .join(ETableNames.users, 'collections.userId', '=', 'users.id')
             .orderBy('CreatedAt', 'desc');
 
-        if (title) {
-            query = query.where('title', 'like', `%${title}%`);
+        if (searchQuery && searchQuery.trim() !== '') {
+            query = query.where(function() {
+                this.where('title', 'like', `%${searchQuery}%`)
+                    .orWhere(`${ETableNames.users}.username`, 'like', `%${searchQuery}%`);
+            });
         }
-        if (author)
-            query = query.where(
-                `${ETableNames.users}.username`,
-                'like',
-                `%${author}%`
-            );
 
         const result = await query.offset((page - 1) * limit).limit(limit);
 
@@ -45,6 +40,7 @@ export const getPublicCollections = async ({
             collectionType: collection.collectionType,
             isPublic: collection.isPublic === 1,
             isPublicPhoneNumber: collection.isPublicPhoneNumber === 1,
+            cardQuantity: collection.cardQuantity,
             createdAt: collection.createdAt,
             updatedAt: collection.updatedAt,
             userData: {
@@ -59,3 +55,4 @@ export const getPublicCollections = async ({
         throw new Error(SQLErrors.NOT_FOUND_REGISTER);
     }
 };
+

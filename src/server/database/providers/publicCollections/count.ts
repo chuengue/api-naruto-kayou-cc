@@ -3,29 +3,27 @@ import { Knex } from '../../knex';
 import { IPublicCollectionsProps } from '../types';
 
 export const count = async ({
-    title,
-    author
+    searchQuery
 }: IPublicCollectionsProps): Promise<number | Error> => {
     try {
         let query = Knex(ETableNames.collections)
             .count('* as count')
             .where('isPublic', true);
 
-        if (author)
-            query = query
-                .innerJoin(
-                    ETableNames.users,
-                    `${ETableNames.collections}.userId`,
-                    '=',
-                    `${ETableNames.users}.id`
-                )
-                .andWhere(
-                    `${ETableNames.users}.username`,
-                    'like',
-                    `%${author}%`
-                );
-
-        if (title) query = query.andWhere('title', 'like', `%${title}%`);
+        if (searchQuery === '' || searchQuery === null || searchQuery === undefined) {
+            query = query.andWhere(function() {
+                this.where('title', 'like', `%${searchQuery}%`)
+                    .orWhereExists(function() {
+                        this.select('*')
+                            .from(ETableNames.users)
+                            .whereRaw(
+                                `${ETableNames.collections}.userId = ${ETableNames.users}.id AND ${ETableNames.users}.username like '%${searchQuery}%'`
+                            );
+                    });
+            });
+        }else {
+            query = query.where('isPublic', true);
+        }
 
         const [{ count }] = await query;
 

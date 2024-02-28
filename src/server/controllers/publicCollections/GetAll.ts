@@ -1,16 +1,11 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-
-import { validation } from '../../shared/middleware';
-
 import * as yup from 'yup';
+
 import { PublicCollectionsProviders } from '../../database/providers/publicCollections';
 import { IPublicCollectionsProps } from '../../database/providers/types';
-import {
-    GenericErrors,
-    getErrorMessage,
-    sendErrorResponse
-} from '../../shared';
+import { GenericErrors, getErrorMessage, sendErrorResponse } from '../../shared';
+import { validation } from '../../shared/middleware';
 import { sendSuccessResponse } from '../../shared/utils/SendSuccessResponse';
 
 const TGenericError = getErrorMessage('Errors.genericErrors');
@@ -20,8 +15,7 @@ export const getAllPublicCollectionValidation = validation(getSchema => ({
         yup.object().shape({
             page: yup.number().optional().moreThan(0),
             limit: yup.number().optional().moreThan(0),
-            title: yup.string().optional().min(3),
-            author: yup.string().optional().min(3)
+            searchQuery: yup.string().optional(),
         })
     )
 }));
@@ -31,8 +25,7 @@ export const getAllPublicCollection = async (
     res: Response
 ) => {
     const filters = {
-        author: req.query.author || '',
-        title: req.query.title || '',
+        searchQuery: req.query.searchQuery ||' ',
         page: req.query.page || 1,
         limit: req.query.limit || 10
     };
