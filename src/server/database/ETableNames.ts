@@ -5,5 +5,6 @@ export enum ETableNames {
     collections = 'collections',
     collectionsItems = ' collections_items',
     roles = 'roles',
-    usersRoles = 'users_roles'
+    usersRoles = 'users_roles',
+    rarities = 'rarities',
 }

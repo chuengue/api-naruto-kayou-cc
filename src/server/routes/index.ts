@@ -6,6 +6,7 @@ import { CollectionController } from '../controllers/collection';
 import { ItemCollectionControllers } from '../controllers/collection/collectionItems';
 import { findLackingControllers } from '../controllers/findLacking';
 import { PublicCollectionsControllers } from '../controllers/publicCollections';
+import { RaritiesControllers } from '../controllers/rarities';
 import { roleControllers } from '../controllers/roles';
 import { WishListControllers } from '../controllers/wishList';
 import { checkUserRole, ensureAuthenticated } from '../shared';
@@ -184,5 +185,29 @@ router.post(
     usersRoleControllers.addUserRolesValidation,
     usersRoleControllers.addUserRoles
 );
+
+// RARITIES
+router.get(
+    '/api/rarities',
+    ensureAuthenticated,
+    checkUserRole(['admin', 'super_admin']),
+    RaritiesControllers.getAllRarities
+);
+
+router.post(
+    '/api/rarities',
+    ensureAuthenticated,
+    checkUserRole(['admin', 'super_admin']),
+    RaritiesControllers.create
+);
+
+
+router.delete(
+    '/api/rarities/:id',
+    ensureAuthenticated,
+    checkUserRole(['admin', 'super_admin']),
+    RaritiesControllers.deleteRarity
+);
+
 
 export { router };
