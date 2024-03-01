@@ -12,11 +12,15 @@ export const count = async ({
 }: IFilterListCardProps): Promise<number | Error> => {
     try {
         let query = Knex(ETableNames.narutoCards).count('* as count');
-
-        if (rarity) query = query.andWhere('rarity', '=', rarity);
-        if (box) query = query.andWhere('box', 'like', `%${box}%`);
+        if (rarity && rarity.length > 0) {
+            query = query.whereIn('rarity', rarity);
+        }
         if (code) query = query.andWhere('code', 'like', `%${code}%`);
         if (name) query = query.andWhere('name', 'like', `%${name}%`);
+        if (box && box.length > 0) {
+            query = query.whereIn('box', box);
+        }
+        
         if (searchQuery && searchQuery.trim() !== '') {
             query = query.where(function() {
                 this.where('name', 'like', `%${searchQuery}%`)

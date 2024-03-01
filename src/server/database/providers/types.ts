@@ -2,9 +2,9 @@ export interface IFilterListCardProps {
     page: number;
     limit: number;
     code?: string;
-    box?: string;
+    box?: string[];
     name?: string;
-    rarity?: string;
+    rarity?: string[];
     searchQuery?: string;
 }
 export interface IGetWishListProps extends IFilterListCardProps {

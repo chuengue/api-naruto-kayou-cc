@@ -3,8 +3,8 @@ export interface IGetAllCardsQueryProps {
     limit?: number;
     name?: string;
     code?: string;
-    rarity?: string;
-    box?: string;
+    rarity?: string[];
+    box?: string[];
     searchQuery?: string;
 
 }

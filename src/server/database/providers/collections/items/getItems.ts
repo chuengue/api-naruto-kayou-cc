@@ -46,23 +46,13 @@ export const getAllCollectionItem = async ({
                 `%${code}%`
             );
         }
-
-        if (rarity) {
-            query = query.where(
-                `${ETableNames.narutoCards}.rarity`,
-                '=',
-                rarity
-            );
+        if (rarity && rarity.length > 0) {
+            query = query.whereIn(`${ETableNames.narutoCards}.rarity`, rarity);
         }
-
-        if (box) {
-            query = query.where(
-                `${ETableNames.narutoCards}.box`,
-                'like',
-                `%${box}%`
-            );
+        
+        if (box && box.length > 0) {
+            query = query.whereIn(`${ETableNames.narutoCards}.box`, box);
         }
-
         const result = await query.offset((page - 1) * limit).limit(limit);
 
         if (!result.length) {

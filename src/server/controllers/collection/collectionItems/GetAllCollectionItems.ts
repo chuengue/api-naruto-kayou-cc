@@ -13,14 +13,14 @@ const TGenericError = getErrorMessage('Errors.genericErrors');
 const TWishlistError = getErrorMessage('Errors.wishListErrors');
 
 export const getAllCollectionItemsValidation = validation(getSchema => ({
-    query: getSchema<IGetAllCardsQueryProps>(
+    query: getSchema(
         yup.object().shape({
             page: yup.number().optional().moreThan(0),
             limit: yup.number().optional().moreThan(0),
             name: yup.string().optional().min(1),
             code: yup.string().optional().min(1),
-            box: yup.string().optional().min(1),
-            rarity: yup.string().optional().min(1),
+            box: yup.mixed().optional(),
+            rarity: yup.mixed().optional(),
             searchQuery: yup.string().optional()
         })
     ),
@@ -35,12 +35,20 @@ export const getAllCollectionItems = async (
     req: Request<IGetAllCollectionItemsParams, {}, {}, IGetAllCardsQueryProps>,
     res: Response
 ) => {
+    const boxes = req.query.box;
+    const boxesArray: string[] = Array.isArray(boxes) ? boxes : (typeof boxes === 'string' ? [boxes] : []);
+    const filteredBoxes = boxesArray.filter(box => box.trim() !== '');
+
+    const rarities = req.query.rarity;
+    const raritiesArray: string[] = Array.isArray(rarities) ? rarities : (typeof rarities === 'string' ? [rarities] : []);
+    const filteredRarities = raritiesArray.filter(rarity => rarity.trim() !== '');
+
     const getAllCollectionProps = {
         collectionId: req.params.collectionId as string,
         userId: req.headers.userId as string,
         code: req.query.code || '',
-        box: req.query.box || '',
-        rarity: req.query.rarity || '',
+        box: filteredBoxes,
+        rarity: filteredRarities,
         name: req.query.name || '',
         page: req.query.page || 1,
         limit: req.query.limit || 10

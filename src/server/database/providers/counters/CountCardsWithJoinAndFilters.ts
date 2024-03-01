@@ -18,18 +18,13 @@ export const countCardsWithJoinAndFilters = async (
             .select(ETableNames.narutoCards + '.*')
             .where(whereParam);
 
-        if (rarity) {
-            query.andWhere(`${ETableNames.narutoCards}.rarity`, '=', rarity);
+        if (rarity && rarity.length > 0) {
+            query.whereIn(`${ETableNames.narutoCards}.rarity`, rarity);
         }
-
-        if (box) {
-            query.andWhere(
-                `${ETableNames.narutoCards}.box`,
-                'like',
-                `%${box}%`
-            );
+            
+        if (box && box.length > 0) {
+            query.whereIn(`${ETableNames.narutoCards}.box`, box);
         }
-
         if (code) {
             query.andWhere(
                 `${ETableNames.narutoCards}.code`,
