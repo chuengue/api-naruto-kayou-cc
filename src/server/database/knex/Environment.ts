@@ -1,11 +1,8 @@
 import { Knex } from 'knex';
 import path from 'path';
 
-const env = process.env.NODE_ENV || 'dev';
-
-console.log(`Environment: ${env}`);
-
-const baseConfig: Knex.Config = {
+const env = process.env.NODE_ENV || 'DEV';
+console.log(`Environment: ${env}`);const baseConfig: Knex.Config = {
     client: process.env[`DATABASE_${env}_CLIENT`],
     connection: {
         host: process.env[`DATABASE_${env}_HOST`],
