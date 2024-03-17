@@ -13,7 +13,6 @@ export const getAll = async ({
     limit,
     searchQuery
 }: IFilterListCardProps): Promise<iCard[] | Error> => {
-    console.log(box);
     try {
         let query = Knex(ETableNames.narutoCards).select('*');
         if (name) query = query.where('name', 'like', `%${name}%`);

@@ -40,7 +40,7 @@ router.post(
 router.get('/api/whoami', ensureAuthenticated, UsersController.whoami);
 
 //ALL-CARDS
-router.get(
+router.post(
     '/api/naruto-cards',
     cardsController.getAllValidation,
     cardsController.getAll
@@ -189,8 +189,6 @@ router.post(
 // RARITIES
 router.get(
     '/api/rarities',
-    ensureAuthenticated,
-    checkUserRole(['admin', 'super_admin']),
     RaritiesControllers.getAllRarities
 );
 

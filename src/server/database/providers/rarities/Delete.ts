@@ -3,7 +3,6 @@ import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 
 export const deleteRarity = async (rarityId: string) => {
-    console.log(rarityId);
     try {
         const roleExist = await Knex(ETableNames.rarities)
             .where({

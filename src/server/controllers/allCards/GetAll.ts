@@ -6,46 +6,43 @@ import { CardsProviders } from '../../database/providers/allCards';
 import { IFilterListCardProps } from '../../database/providers/types';
 import { GenericErrors, getErrorMessage, sendErrorResponse, sendSuccessResponseList } from '../../shared';
 import { validation } from '../../shared/middleware';
-import { IGetAllCardsQueryProps } from './types';
+import { IGetAllCardsBodyProps, IGetAllCardsQueryProps } from './types';
 
 const TGenericError = getErrorMessage('Errors.genericErrors');
 const TCardError = getErrorMessage('Errors.cardsErrors');
 
 export const getAllValidation = validation(getSchema => ({
-    query: getSchema(
+    body: getSchema(
         yup.object().shape({
-            page: yup.number().optional().moreThan(0),
-            limit: yup.number().optional().moreThan(0),
             name: yup.string().optional(),
             code: yup.string().optional(),
             box: yup.mixed().optional(),
             rarity: yup.mixed().optional(),
             searchQuery: yup.string().optional()
         })
-    )
+    ),
+    query: getSchema(
+        yup.object().shape({
+            page: yup.number().optional().moreThan(0),
+            limit: yup.number().optional().moreThan(0),
+        })
+        )
 }));
 
 export const getAll = async (
-    req: Request<{}, {}, {}, IGetAllCardsQueryProps>,
+    req: Request<{}, {}, IGetAllCardsBodyProps, IGetAllCardsQueryProps >,
     res: Response
 ) => {
-    const boxes = req.query.box;
-    const boxesArray: string[] = Array.isArray(boxes) ? boxes : (typeof boxes === 'string' ? [boxes] : []);
-    const filteredBoxes = boxesArray.filter(box => box.trim() !== '');
 
-    const rarities = req.query.rarity;
-    const raritiesArray: string[] = Array.isArray(rarities) ? rarities : (typeof rarities === 'string' ? [rarities] : []);
-    const filteredRarities = raritiesArray.filter(rarity => rarity.trim() !== '');
     const filters: IFilterListCardProps = {
-        code: req.query.code || '',
-        box: filteredBoxes,
-        rarity: filteredRarities ,
-        name: req.query.name || '',
+        code: req.body.code || '',
+        box: req.body.box,
+        rarity: req.body.rarity,
+        name: req.body.name || '',
         page: req.query.page || 1,
         limit: req.query.limit || 10,
-        searchQuery: req.query.searchQuery || ''
+        searchQuery: req.body.searchQuery || ''
     };
-    console.log(boxes);
     const result = await CardsProviders.getAll(filters);
 
     const count = await CardsProviders.count(filters);
