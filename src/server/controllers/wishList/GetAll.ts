@@ -7,6 +7,7 @@ import { CountersProviders } from '../../database/providers/counters';
 import { GenericErrors, getErrorMessage, sendErrorResponse, sendSuccessResponseList, WishListErrors } from '../../shared';
 import { validation } from '../../shared/middleware';
 import { IGetAllCardsQueryProps } from '../allCards/types';
+import { IGetItemCollectionQuery } from '../collection/collectionItems/types';
 import { WishListProviders } from './../../database/providers/wishList/index';
 
 const TGenericError = getErrorMessage('Errors.genericErrors');
@@ -28,7 +29,7 @@ export const getAllValidation = validation(getSchema => ({
 }));
 
 export const getAll = async (
-    req: Request<{}, {}, {}, IGetAllCardsQueryProps>,
+    req: Request<{}, {}, {}, IGetItemCollectionQuery>,
     res: Response
 ) => {
     const boxes = req.query.box;

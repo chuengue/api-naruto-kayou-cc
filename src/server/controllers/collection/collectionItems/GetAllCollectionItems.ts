@@ -6,8 +6,7 @@ import { ETableNames } from '../../../database/ETableNames';
 import { CollectionProvider } from '../../../database/providers/collections';
 import { CountersProviders } from '../../../database/providers/counters/index';
 import { GenericErrors, getErrorMessage, sendErrorResponse, sendSuccessResponseList, SQLErrors, validation, WishListErrors } from '../../../shared';
-import { IGetAllCardsQueryProps } from '../../allCards/types';
-import { IGetAllCollectionItemsParams } from './types';
+import { IGetAllCollectionItemsParams, IGetItemCollectionQuery } from './types';
 
 const TGenericError = getErrorMessage('Errors.genericErrors');
 const TWishlistError = getErrorMessage('Errors.wishListErrors');
@@ -32,7 +31,7 @@ export const getAllCollectionItemsValidation = validation(getSchema => ({
 }));
 
 export const getAllCollectionItems = async (
-    req: Request<IGetAllCollectionItemsParams, {}, {}, IGetAllCardsQueryProps>,
+    req: Request<IGetAllCollectionItemsParams, {}, {}, IGetItemCollectionQuery>,
     res: Response
 ) => {
     const boxes = req.query.box;
