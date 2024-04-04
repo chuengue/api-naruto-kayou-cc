@@ -6,7 +6,6 @@ import { ETableNames } from '../../database/ETableNames';
 import { CountersProviders } from '../../database/providers/counters';
 import { GenericErrors, getErrorMessage, sendErrorResponse, sendSuccessResponseList, WishListErrors } from '../../shared';
 import { validation } from '../../shared/middleware';
-import { IGetAllCardsQueryProps } from '../allCards/types';
 import { IGetItemCollectionQuery } from '../collection/collectionItems/types';
 import { WishListProviders } from './../../database/providers/wishList/index';
 
@@ -71,13 +70,6 @@ export const getAll = async (
             res,
             StatusCodes.INTERNAL_SERVER_ERROR,
             TGenericError(GenericErrors.CountError)
-        );
-    }
-    if (result.length === 0) {
-        return sendErrorResponse(
-            res,
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            TCardError(2001)
         );
     }
 
